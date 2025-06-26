@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AspNetCoreArchTemplate.GCommon\AspNetCoreArchTemplate.GCommon.csproj" />
-    <ProjectReference Include="..\AspNetCoreArchTemplate.Services.Common\AspNetCoreArchTemplate.Services.Common.csproj" />
+    <ProjectReference Include="..\AspNetCoreArchTemplate.GCommon\FitnessPlatform.GCommon.csproj" />
+    <ProjectReference Include="..\AspNetCoreArchTemplate.Services.Common\FitnessPlatform.Services.Common.csproj" />
   </ItemGroup>
 
 </Project>

@@ -18,8 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AspNetCoreArchTemplate.Data\AspNetCoreArchTemplate.Data.csproj" />
-    <ProjectReference Include="..\AspNetCoreArchTemplate.Services.Core\AspNetCoreArchTemplate.Services.Core.csproj" />
+    <ProjectReference Include="..\AspNetCoreArchTemplate.Data\FitnessPlatform.Data.csproj" />
+    <ProjectReference Include="..\AspNetCoreArchTemplate.Services.Core\FitnessPlatform.Services.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

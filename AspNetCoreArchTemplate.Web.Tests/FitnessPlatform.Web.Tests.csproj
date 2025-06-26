@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AspNetCoreArchTemplate.Web\AspNetCoreArchTemplate.Web.csproj" />
+    <ProjectReference Include="..\AspNetCoreArchTemplate.Web\FitnessPlatform.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>

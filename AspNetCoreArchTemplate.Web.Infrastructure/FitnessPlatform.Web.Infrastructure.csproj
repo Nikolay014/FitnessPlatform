@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AspNetCoreArchTemplate.GCommon\AspNetCoreArchTemplate.GCommon.csproj" />
+    <ProjectReference Include="..\AspNetCoreArchTemplate.GCommon\FitnessPlatform.GCommon.csproj" />
   </ItemGroup>
 
 </Project>
