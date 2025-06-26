@@ -5,35 +5,6 @@ This project follows a Multitier architecture designed for scalability, maintain
 
 ---
 
-## 🚀 Getting Started
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/KrIsKa7a/ASP.NET-Core-Arch-Template.git
-   ```
-
-2. Navigate to the project directory:
-   ```bash
-   cd ASP.NET-Core-Arch-Template
-   ```
-
-3. Restore dependencies:
-   ```bash
-   dotnet restore
-   ```
-
-4. Run the application:
-   ```bash
-   dotnet run
-   ```
-
-5. Open your browser and navigate to:
-   ```
-   http://localhost:{defaultAppPort}
-   ```
-
----
-
 
 ## 🛠️ Development Principles
 
