@@ -40,11 +40,12 @@ namespace FitnessPlatform.Data.Models
 
         public virtual ICollection<Trainer> Trainers { get; set; } = new List<Trainer>();
 
-        
+
+
         public virtual ICollection<UserGymSubscription> Subscribers { get; set; } = new List<UserGymSubscription>();
 
         
-        public virtual ICollection<TrainerSchedule> Schedules { get; set; } = new List<TrainerSchedule>();
+        //public virtual ICollection<TrainerSchedule> Schedules { get; set; } = new List<TrainerSchedule>();
 
 
         public virtual ICollection<Event> Events { get; set; } = new List<Event>();

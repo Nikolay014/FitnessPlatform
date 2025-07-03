@@ -10,15 +10,17 @@ namespace FitnessPlatform.Data.Models
         public int Id { get; set; }
 
         [Required]
-        
+        public string TrainerImage { get; set; } = null!;
+
+        [Required]
         public string UserId { get; set; } = null!;
         [ForeignKey("UserId")]
-        public User User { get; set; } = null!;
+        public ApplicationUser User { get; set; } = null!;
 
         [Required]
         public int GymId { get; set; }
         [ForeignKey("GymId")]
-        public Gym Gym { get; set; } = null!;
+        public Gym Gym { get; set; }
 
         [Required]
         [MaxLength(100)]
@@ -27,7 +29,7 @@ namespace FitnessPlatform.Data.Models
         
 
         public virtual ICollection<TrainerClient> Clients { get; set; } = new List<TrainerClient>();
-        public virtual ICollection<TrainerSchedule> Schedules { get; set; } = new List<TrainerSchedule>();
-        public virtual ICollection<Workout> Workouts { get; set; } = new List<Workout>();
+        //public virtual ICollection<TrainerSchedule> Schedules { get; set; } = new List<TrainerSchedule>();
+        public virtual ICollection<Event> Events { get; set; } = new List<Event>();
     }
 }

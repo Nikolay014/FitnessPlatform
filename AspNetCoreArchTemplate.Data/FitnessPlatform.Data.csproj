@@ -26,9 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AspNetCoreArchTemplate.Data.Common\AspNetCoreArchTemplate.Data.Common.csproj" />
-    <ProjectReference Include="..\AspNetCoreArchTemplate.Data.Models\AspNetCoreArchTemplate.Data.Models.csproj" />
-    <ProjectReference Include="..\AspNetCoreArchTemplate.GCommon\AspNetCoreArchTemplate.GCommon.csproj" />
+    <ProjectReference Include="..\AspNetCoreArchTemplate.Data.Common\FitnessPlatform.Data.Common.csproj" />
+    <ProjectReference Include="..\AspNetCoreArchTemplate.Data.Models\FitnessPlatform.Data.Models.csproj" />
+    <ProjectReference Include="..\AspNetCoreArchTemplate.GCommon\FitnessPlatform.GCommon.csproj" />
   </ItemGroup>
 
 </Project>

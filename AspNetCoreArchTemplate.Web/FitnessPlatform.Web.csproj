@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AspNetCoreArchTemplate.Data.Common\FitnessPlatform.Data.Common.csproj" />
     <ProjectReference Include="..\AspNetCoreArchTemplate.Data\FitnessPlatform.Data.csproj" />
     <ProjectReference Include="..\AspNetCoreArchTemplate.GCommon\FitnessPlatform.GCommon.csproj" />
     <ProjectReference Include="..\AspNetCoreArchTemplate.Services.Core\FitnessPlatform.Services.Core.csproj" />
