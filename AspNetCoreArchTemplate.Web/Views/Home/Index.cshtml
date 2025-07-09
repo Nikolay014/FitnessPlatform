@@ -2,7 +2,119 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" />
+
+<body>
+    <div class="main-container">
+        <div class="header-container">
+            <header>
+               
+                
+            </header>
+        </div>
+        <main>
+            <div class="content-container">
+                <section class="team-description" id="coaches">
+                    <div class="team-description-wrapper">
+                        <h3>OUR COACHES</h3>
+                        <p>One of the best athlets</p>
+                        <ul class="trainer-list">
+                            <li>
+
+                                <img src="./images/rock.png" alt="pic">
+
+                                <p>Dwayne Johnson</p>
+                                <p class="role">Bodybuilding</p>
+                                <p>New York, USA</p>
+
+
+                            </li>
+                            <li>
+
+                                <img src="./images/minela.jpg" alt="pic">
+                                <p>Jessica Simpson</p>
+                                <p class="role">Yoga</p>
+                                <p>Chamonix-Mont-Blanc, France</p>
+
+                            </li>
+                            <li>
+
+                                <img src="./images/swimming.jpg" alt="pic">
+                                <p>Lily Chapman</p>
+                                <p class="role">Swimming Instructor</p>
+                                <p>London, United Kingdom</p>
+
+                            </li>
+                            <li>
+
+                                <img src="./images/ortiz.jpg" alt="pic">
+                                <p>Robert Brown</p>
+                                <p class="role">Bodybuilding</p>
+                                <p>Kitzbuhel, Austria</p>
+
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+                <section class="about-us" id="training-halls">
+                    <h3>TRAINING HALLS</h3>
+                    <p>One of the most modern halls</p>
+                    <p>Welcome to our fitness center, a place where wellness and vitality converge. Our facility offers a holistic fitness experience designed to cater to your needs. Indulge in a revitalizing ambiance where you can shape your body, unwind in our lavish spa, and refresh yourself in our pristine pool. Relax, recharge, and accomplish your fitness aspirations with us. Immerse yourself in a realm where fitness meets tranquility</p>
+                </section>
+                <section class="choose-us">
+                    <ul>
+                        <li>
+                            <img src="./images/spa.jpg">
+                            <h4>Luxury SPA</h4>
+                            <p>Step into our modern spa oasis, where relaxation meets sophistication. Our curated array of contemporary treatments and serene ambiance invites you to unwind and rejuvenate. Discover a haven where indulgence and rejuvenation harmonize, offering you a serene escape from the hustle and bustle of everyday life</p>
+                        </li>
+                        <li>
+                            <img src="./images/fitness.jpg">
+                            <h4>Fitness</h4>
+                            <p>Welcome to our fitness center—a dynamic space dedicated to your well-being. Explore top-notch equipment and expert guidance in an environment crafted to inspire your fitness journey.</p>
+                        </li>
+                        <li>
+                            <img src="./images/pool.jpg">
+                            <h4>Swimming pool</h4>
+                            <p>Dive into serenity at our pristine pool—a refreshing oasis for relaxation and exercise. Immerse yourself in crystal-clear waters and embrace moments of tranquility amidst a bustling world.</p>
+                        </li>
+                    </ul>
+
+                </section>
+                <section class="plans" id="plans">
+                    <h3>Plans</h3>
+                    <p>We offer two different subscription plans </p>
+                    <ul class="plan-list">
+                        <li class="item">
+                            <section class="avatar">
+                                <img src="./images/month.jpg">
+                            </section>
+                            <section class="content">
+                                <h4>1 Month - Standart Plan</h4>
+                                <p>The one-month plan includes unlimited access to the gym, one visit per week to the SPA and swimming pool and two group training sessions with an instructor.</p>
+                            </section>
+                        </li>
+                        <li class="item">
+                            <section class="avatar">
+                                <img src="./images/year.png">
+                            </section>
+                            <section class="content">
+                                <h4>1 Year - Standart Plan</h4>
+                                <p>The one-year plan includes unlimited access to the gym, unlimited visit per week to the SPA and swimming pool and 4 group training sessions with an instructor.</p>
+                            </section>
+                        </li>
+                    </ul>
+
+                </section>
+            </div>
+        </main>
+       
+    </div>
+    <script>
+        function toggleMenu() {
+            const navbar = document.querySelector('.navbar');
+            navbar.classList.toggle('active');
+        }
+    </script>
+</body>

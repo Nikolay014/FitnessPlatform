@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using AspNetCoreArchTemplate.Data;
 namespace AspNetCoreArchTemplate.Web
 {
     using Data;
