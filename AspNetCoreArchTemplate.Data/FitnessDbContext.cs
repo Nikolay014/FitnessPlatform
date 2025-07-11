@@ -1,12 +1,13 @@
 ﻿namespace AspNetCoreArchTemplate.Data
 {
     using FitnessPlatform.Data.Models;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
 
-    public class FitnessPlatformDbContext : IdentityDbContext<ApplicationUser>
+    public class FitnessDbContext : IdentityDbContext<ApplicationUser,IdentityRole,string>
     {
-        public FitnessPlatformDbContext(DbContextOptions<FitnessPlatformDbContext> options)
+        public FitnessDbContext(DbContextOptions<FitnessDbContext> options)
             : base(options)
         {
 

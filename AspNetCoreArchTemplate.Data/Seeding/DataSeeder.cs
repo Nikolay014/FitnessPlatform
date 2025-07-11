@@ -1,0 +1,55 @@
+﻿using FitnessPlatform.Data.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace FitnessPlatform.Data.Seeding
+{
+    public static class DataSeeder
+    {
+        public static async Task SeedRolesAndAdminAsync(IServiceProvider services)
+        {
+            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+
+            // Роли
+            string[] roles = { "Admin", "Trainer", "User" };
+
+            foreach (var role in roles)
+            {
+                if (!await roleManager.RoleExistsAsync(role))
+                    await roleManager.CreateAsync(new IdentityRole(role));
+            }
+
+            // Админ акаунт
+            string adminEmail = "admin@elitegym.com";
+            var adminUser = await userManager.FindByEmailAsync(adminEmail);
+
+            if (adminUser == null)
+            {
+                var newAdmin = new ApplicationUser
+                {
+                    UserName = "admin@elitegym.com",
+                    Email = "admin@elitegym.com",
+                    EmailConfirmed = true,
+                    FirstName = "System",
+                    LastName = "Admin",
+                    Gender = "Other",
+                    PhoneNumber = "0000000000",
+                    DateOfBirth = DateTime.UtcNow.AddYears(-30),
+                    HeightCm = 180,
+                    WeightKg = 75
+                };
+
+                var result = await userManager.CreateAsync(newAdmin, "Admin123!");
+
+                if (result.Succeeded)
+                    await userManager.AddToRoleAsync(newAdmin, "Admin");
+            }
+        }
+    }
+}

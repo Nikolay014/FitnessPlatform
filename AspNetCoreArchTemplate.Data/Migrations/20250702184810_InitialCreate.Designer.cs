@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FitnessPlatform.Data.Migrations
 {
-    [DbContext(typeof(FitnessPlatformDbContext))]
+    [DbContext(typeof(FitnessDbContext))]
     [Migration("20250702184810_InitialCreate")]
     partial class InitialCreate
     {

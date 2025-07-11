@@ -4,34 +4,46 @@ using AspNetCoreArchTemplate.Data;
 namespace AspNetCoreArchTemplate.Web
 {
     using Data;
-
+    using FitnessPlatform.Data.Models;
+    using FitnessPlatform.Data.Seeding;
+    using FitnessPlatform.Services.Core;
+    using FitnessPlatform.Services.Core.Contracts;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
             
             string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             
             builder.Services
-                .AddDbContext<FitnessPlatformDbContext>(options =>
+                .AddDbContext<FitnessDbContext>(options =>
                 {
                     options.UseSqlServer(connectionString);
                 });
+            builder.Services.AddScoped<IGymService, GymService>();
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services
-                .AddDefaultIdentity<IdentityUser>(options =>
+                .AddDefaultIdentity<ApplicationUser>(options =>
                 {
-                    options.SignIn.RequireConfirmedAccount = true;
+                    options.SignIn.RequireConfirmedAccount = false;
                 })
-                .AddEntityFrameworkStores<FitnessPlatformDbContext>();
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<FitnessDbContext>()
+                .AddDefaultTokenProviders();;
             builder.Services.AddControllersWithViews();
 
             WebApplication? app = builder.Build();
-            
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                await DataSeeder.SeedRolesAndAdminAsync(services);
+            }
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseMigrationsEndPoint();
