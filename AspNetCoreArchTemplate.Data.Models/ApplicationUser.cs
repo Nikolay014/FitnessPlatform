@@ -26,6 +26,7 @@ namespace FitnessPlatform.Data.Models
         [Comment("Biological sex of the user: Male, Female, Other")]
         [Required]
         [MaxLength(10)]
+        
         public string Gender { get; set; }
 
         [Comment("Phone number of the current person")]
