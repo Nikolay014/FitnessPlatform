@@ -12,5 +12,7 @@ namespace FitnessPlatform.Services.Core.Contracts
         Task<IEnumerable<GymVM>> GetGymsAsync(string? userId);
 
         Task CreateGymAsync(CreateGymVM model);
+
+        Task<GymDetailsVM> GetGymDetailsAsync(int gymId, string userId, bool isAdmin);
     }
 }

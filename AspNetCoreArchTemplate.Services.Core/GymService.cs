@@ -43,6 +43,27 @@ namespace FitnessPlatform.Services.Core
             await dbContext.SaveChangesAsync();
         }
 
+        public async Task<GymDetailsVM> GetGymDetailsAsync(int gymId, string userId, bool isAdmin)
+        {
+            var gym = await dbContext.Gym
+                .Include(g => g.Images)
+                .Include(g => g.Subscribers)
+                .FirstOrDefaultAsync(g => g.Id == gymId);
+
+            if (gym == null) throw new ArgumentException("Gym not found.");
+
+            return new GymDetailsVM
+            {
+                Id = gym.Id,
+                Name = gym.Name,
+                Location = gym.Location,
+                Description = gym.Description,
+                Images = gym.Images.Select(i => i.ImageUrl).ToList(),
+                IsUserSubscribed = gym.Subscribers.Any(s => s.UserId == userId),
+                IsAdmin = isAdmin
+            };
+        }
+
         public async Task<IEnumerable<GymVM>> GetGymsAsync(string? userId)
         {
             var gyms = await dbContext.Gym

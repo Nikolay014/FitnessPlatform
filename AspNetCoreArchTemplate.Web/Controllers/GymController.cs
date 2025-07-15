@@ -48,5 +48,16 @@ namespace FitnessPlatform.Web.Controllers
             return RedirectToAction("AllGyms", "Gym");
         }
 
+        
+        public async Task<IActionResult> Details(int id)
+        {
+            string userId = GetUserId(); 
+            bool isAdmin = User.IsInRole("Admin");
+
+            var gymDetails = await gymService.GetGymDetailsAsync(id, userId, isAdmin);
+            return View(gymDetails);
+        }
+
+
     }
 }
