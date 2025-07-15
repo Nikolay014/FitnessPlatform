@@ -1,4 +1,5 @@
 ﻿using AspNetCoreArchTemplate.Data;
+using FitnessPlatform.Data.Models;
 using FitnessPlatform.Services.Core.Contracts;
 using FitnessPlatform.Web.ViewModels.Gym;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,30 @@ namespace FitnessPlatform.Services.Core
         public GymService(FitnessDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        }
+
+        public async Task CreateGymAsync(CreateGymVM model)
+        {
+            var gym = new Gym
+            {
+                Name = model.Name,
+                Location = model.Location,
+                Description = model.Description,
+                
+            };
+
+            dbContext.Gym.Add(gym);
+            await dbContext.SaveChangesAsync();
+
+            var mainImage = new GymImage
+            {
+                GymId = gym.Id,
+                ImageUrl = model.MainImageUrl,
+                IsPrimary = true
+            };
+
+            dbContext.GymImage.Add(mainImage);
+            await dbContext.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<GymVM>> GetGymsAsync(string? userId)

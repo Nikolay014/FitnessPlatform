@@ -146,6 +146,11 @@ namespace FitnessPlatform.Web.Areas.Identity.Pages.Account
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            var user = await _userManager.GetUserAsync(User);
+            var firstName = user?.FirstName;
+            
+            ViewData["FirstName"] = firstName;
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -174,6 +179,8 @@ namespace FitnessPlatform.Web.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    await _userManager.AddToRoleAsync(user, "User");
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
