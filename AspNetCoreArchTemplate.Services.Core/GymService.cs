@@ -43,6 +43,8 @@ namespace FitnessPlatform.Services.Core
             await dbContext.SaveChangesAsync();
         }
 
+      
+
         public async Task<GymDetailsVM> GetGymDetailsAsync(int gymId, string userId, bool isAdmin)
         {
             var gym = await dbContext.Gym
@@ -81,6 +83,67 @@ namespace FitnessPlatform.Services.Core
                 .ToListAsync();
 
             return gyms;
+        }
+        
+
+        public async Task<DeleteGymVM> GetGymForDeleteAsync(int id, string? userId, bool isAdmin)
+        {
+            var gym = await dbContext.Gym
+              .AsNoTracking()
+              .Where(g => g.Id == id)
+              .Select(g => new DeleteGymVM
+              {
+                  Id = g.Id,
+                  Name = g.Name,
+                  IsAdmin = isAdmin,
+                  
+              })
+              .FirstOrDefaultAsync();
+
+            // Проверка за съществуване и достъп
+            if (gym == null || (!isAdmin))
+            {
+                return null;
+            }
+
+            return gym;
+        }
+        public async Task DeleteGymAsync(int gymId)
+        {
+            Gym? gym = await dbContext.Gym
+             .Where(g => g.Id == gymId)
+             .FirstOrDefaultAsync();
+
+            if (gym == null)
+                return;
+
+            // Проверка за достъп, ако userId е подаден
+           
+
+            gym.IsDeleted = true;
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<EditGymVM> GetRecipeForEditAsync(int id)
+        {
+            Gym gym = await dbContext.Gym
+                .Include(g => g.Images)
+                .FirstOrDefaultAsync(g => g.Id == id);
+
+            return new EditGymVM
+            {
+                Id = gym.Id,
+                Name = gym.Name,
+                Location = gym.Location,
+                Description = gym.Description,
+                MainImageUrl = gym.Images.FirstOrDefault(i => i.IsPrimary)?.ImageUrl ?? string.Empty
+            };
+
+        }
+
+        public Task EditRecipeAsync(EditGymVM model)
+        {
+            throw new NotImplementedException();
         }
     }
 }

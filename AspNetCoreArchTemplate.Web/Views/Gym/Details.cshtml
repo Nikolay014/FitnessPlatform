@@ -46,11 +46,15 @@
                     @if (Model.IsAdmin)
                     {
                         <div class="d-flex gap-2">
-                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-rounded w-50">Edit</a>
+                            <a asp-action="Update" asp-route-id="@Model.Id" class="btn btn-warning btn-rounded w-50">Edit</a>
                             <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="w-50">
                                 <button type="submit" class="btn btn-danger btn-rounded w-100">Delete</button>
                             </form>
                         </div>
+                    }
+                    else if (User?.Identity?.IsAuthenticated == false)
+                    {
+
                     }
                     else if (!Model.IsUserSubscribed)
                     {
@@ -58,6 +62,7 @@
                             <button type="submit" class="btn btn-success btn-rounded w-100">Subscribe</button>
                         </form>
                     }
+                    
                     else
                     {
                         <span class="text-success mt-2">✅ You are subscribed to this gym.</span>

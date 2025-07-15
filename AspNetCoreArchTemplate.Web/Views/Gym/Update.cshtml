@@ -1,0 +1,50 @@
+﻿@using FitnessPlatform.Web.ViewModels.Gym
+@model EditGymVM
+
+}
+<link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+
+
+
+
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <section>
+            <form id="account" method="post">
+                <h2>Update Gym</h2>
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="@Model.Name" class="form-control" autocomplete="name" aria-required="true" />
+                    <label asp-for="@Model.Name" class="form-label">Name</label>
+                    <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="@Model.Location" class="form-control" autocomplete="location" aria-required="true" />
+                    <label asp-for="@Model.Location" class="form-label">Location</label>
+                    <span asp-validation-for="@Model.Location" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="@Model.Description" class="form-control" autocomplete="name" aria-required="true" />
+                    <label asp-for="@Model.Description" class="form-label">Description</label>
+                    <span asp-validation-for="@Model.Description" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="@Model.MainImageUrl" class="form-control" autocomplete="location" aria-required="true" />
+                    <label asp-for="@Model.MainImageUrl" class="form-label">Image</label>
+                    <span asp-validation-for="@Model.MainImageUrl" class="text-danger"></span>
+                </div>
+
+                <div>
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Update</button>
+                </div>
+
+            </form>
+        </section>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
