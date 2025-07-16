@@ -4,6 +4,7 @@ using AspNetCoreArchTemplate.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitnessPlatform.Data.Migrations
 {
     [DbContext(typeof(FitnessDbContext))]
-    partial class FitnessPlatformDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250716141904_AddSubscriptionPlanTable")]
+    partial class AddSubscriptionPlanTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -19,9 +19,11 @@ namespace FitnessPlatform.Services.Core.Contracts
 
         Task DeleteGymAsync(int gymId);
 
-        Task<EditGymVM> GetRecipeForEditAsync(int id);
+        Task<EditGymVM> GetGymForEditAsync(int id);
 
-        Task EditRecipeAsync(EditGymVM model);
+        Task EditGymAsync(EditGymVM model);
+
+        Task<SubscribeGymVM> GetSubscriptionPlans();
 
     }
 }

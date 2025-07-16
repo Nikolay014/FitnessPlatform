@@ -1,5 +1,7 @@
-﻿using FitnessPlatform.Data.Models;
+﻿using AspNetCoreArchTemplate.Data;
+using FitnessPlatform.Data.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -49,6 +51,35 @@ namespace FitnessPlatform.Data.Seeding
 
                 if (result.Succeeded)
                     await userManager.AddToRoleAsync(newAdmin, "Admin");
+            }
+        }
+        public static async Task SeedSubscriptionPlansAsync(IServiceProvider services)
+        {
+            using var scope = services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<FitnessDbContext>();
+
+            if (!await dbContext.SubscriptionPlans.AnyAsync())
+            {
+                var plans = new List<SubscriptionPlan>
+        {
+            new SubscriptionPlan
+            {
+                Name = "1 Month - Standard Plan",
+                DurationInDays = 30,
+                Price = 45,
+                Description = "Unlimited gym access, 1 SPA visit/week, 2 group sessions/month"
+            },
+            new SubscriptionPlan
+            {
+                Name = "1 Year - Standard Plan",
+                DurationInDays = 365,
+                Price = 399,
+                Description = "Unlimited gym access, unlimited SPA, 4 group sessions/month"
+            }
+        };
+
+                dbContext.SubscriptionPlans.AddRange(plans);
+                await dbContext.SaveChangesAsync();
             }
         }
     }

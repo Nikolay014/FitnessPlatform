@@ -124,7 +124,7 @@ namespace FitnessPlatform.Services.Core
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task<EditGymVM> GetRecipeForEditAsync(int id)
+        public async Task<EditGymVM> GetGymForEditAsync(int id)
         {
             Gym gym = await dbContext.Gym
                 .Include(g => g.Images)
@@ -141,9 +141,23 @@ namespace FitnessPlatform.Services.Core
 
         }
 
-        public Task EditRecipeAsync(EditGymVM model)
+        public async Task EditGymAsync(EditGymVM model)
         {
-            throw new NotImplementedException();
+           Gym  gym =  await dbContext.Gym.Include(g => g.Images).
+                Where(g=>g.Id == model.Id).FirstOrDefaultAsync();
+
+            if (gym == null)
+                return;
+
+            gym.Name = model.Name;
+            gym.Location = model.Location;
+            gym.Description = model.Description;
+            gym.Images.Where(i => i.IsPrimary).FirstOrDefault().ImageUrl = model.MainImageUrl;
+
+           
+            await dbContext.SaveChangesAsync();
+            
+
         }
     }
 }

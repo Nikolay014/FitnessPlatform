@@ -21,5 +21,12 @@ namespace FitnessPlatform.Data.Models
 
         [ForeignKey("GymId")]
         public Gym Gym { get; set; }
+
+        [Required]
+        public int SubscriptionPlanId { get; set; }
+        public SubscriptionPlan Plan { get; set; }
+
+        public DateTime SubscribedOn { get; set; } = DateTime.UtcNow;
+        public DateTime ValidUntil { get; set; }
     }
 }

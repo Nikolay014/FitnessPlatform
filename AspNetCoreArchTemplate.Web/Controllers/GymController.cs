@@ -94,9 +94,10 @@ namespace FitnessPlatform.Web.Controllers
             return RedirectToAction("AllGyms", "Gym");
         }
         [Authorize(Roles = "Admin")]
+        [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
-            EditGymVM editGymVM = await gymService.GetRecipeForEditAsync(id);
+            EditGymVM editGymVM = await gymService.GetGymForEditAsync(id);
             if (editGymVM == null)
             {
                 return NotFound();
@@ -104,7 +105,18 @@ namespace FitnessPlatform.Web.Controllers
             return View(editGymVM);
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> Update(EditGymVM editGymVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(editGymVM);
+            }
+             await gymService.EditGymAsync(editGymVM);
+            return RedirectToAction("AllGyms", "Gym");
 
+        }
 
     }
 }
