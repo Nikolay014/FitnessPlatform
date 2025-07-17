@@ -1,0 +1,51 @@
+﻿@using FitnessPlatform.Web.ViewModels.Gym
+@model SubscribeGymVM
+
+@{
+    ViewData["Title"] = "Choose Subscription Plan";
+}
+
+<section class="plans-wrapper">
+    <h3 class="text-center">Plans</h3>
+    <p class="text-center mb-4">We offer two different subscription plans</p>
+
+    <form method="post" asp-action="Subscribe">
+        <div class="plan-container">
+            @foreach (var plan in Model.AvailablePlans)
+            {
+                <div class="plan-card @(Model.SelectedPlanId == plan.Id ? "selected" : "")"
+                     onclick="selectPlan(@plan.Id, this)">
+                    <div class="plan-image">
+                        <img src="~/images/@(plan.DurationInDays == 30 ? "month.jpg" : "year.png")" />
+                    </div>
+                    <div class="plan-content">
+                        <h4>@plan.Name</h4>
+                        <p class="fw-bold text-primary">£@plan.Price</p>
+                        <p>@plan.Description</p>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <input type="hidden" asp-for="SelectedPlanId" id="selectedPlanId" />
+        <input type="hidden" asp-for="GymId" />
+
+        <div class="text-center mt-3">
+            <button type="submit" class="btn btn-success">Абонирай се</button>
+            <a asp-action="AllGyms" class="btn btn-outline-secondary btn-rounded mt-3">← Back to All Gyms</a>
+        </div>
+    </form>
+</section>
+@section Scripts {
+    <script>
+        function selectPlan(planId, element) {
+            document.getElementById('selectedPlanId').value = planId;
+
+            // премахни избора от всички
+            document.querySelectorAll('.plan-card').forEach(card => card.classList.remove('selected'));
+
+            // добави избора на текущата
+            element.classList.add('selected');
+        }
+    </script>
+}

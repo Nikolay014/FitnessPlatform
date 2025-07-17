@@ -58,10 +58,16 @@
                     }
                     else if (!Model.IsUserSubscribed)
                     {
-                        <form asp-action="Subscribe" asp-route-id="@Model.Id" method="post">
+                        <form asp-action="Subscribe" asp-route-id="@Model.Id" method="get">
                             <button type="submit" class="btn btn-success btn-rounded w-100">Subscribe</button>
                         </form>
                     }
+                    else if (Model.IsUserSubscribed)
+					{
+                        <p class="mt-2 text-muted text-center">
+                            Your subscription expires on <strong>@Model.SubscriptionEndDate?.ToString("dd MMM yyyy")</strong>
+                        </p>
+					}
                     
                     else
                     {

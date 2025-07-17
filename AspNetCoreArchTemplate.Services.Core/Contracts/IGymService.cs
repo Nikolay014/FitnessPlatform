@@ -23,7 +23,9 @@ namespace FitnessPlatform.Services.Core.Contracts
 
         Task EditGymAsync(EditGymVM model);
 
-        Task<SubscribeGymVM> GetSubscriptionPlans();
+        Task<SubscribeGymVM> GetSubscriptionPlansAsync(int id);
+
+        Task SubscribeToGymAsync(int gymId, string userId, int planId);
 
     }
 }

@@ -117,6 +117,28 @@ namespace FitnessPlatform.Web.Controllers
             return RedirectToAction("AllGyms", "Gym");
 
         }
+        [Authorize(Roles ="User")]
+        [HttpGet]
+        public async Task<IActionResult> Subscribe(int id)
+        {
+            SubscribeGymVM sub = await gymService.GetSubscriptionPlansAsync(id);
+            return View(sub);
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpPost]
+        public async Task<IActionResult> Subscribe(SubscribeGymVM subscribeGymVM)
+        {
+            string? userId = GetUserId();
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            int gymId = subscribeGymVM.GymId;
+            int planId = subscribeGymVM.SelectedPlanId;
+            await gymService.SubscribeToGymAsync(gymId, userId, planId);
+            return RedirectToAction("AllGyms", "Gym");
+        }
 
     }
 }

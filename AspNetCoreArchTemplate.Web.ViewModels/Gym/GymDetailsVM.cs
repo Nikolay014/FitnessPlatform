@@ -18,6 +18,7 @@ namespace FitnessPlatform.Web.ViewModels.Gym
         
 
         public bool IsUserSubscribed { get; set; } // за потребител
+        public DateTime? SubscriptionEndDate { get; set; }
         public bool IsAdmin { get; set; }
 
         public List<string> Images { get; set; } = new List<string>();
