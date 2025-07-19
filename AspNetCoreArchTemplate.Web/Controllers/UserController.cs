@@ -28,5 +28,23 @@ namespace FitnessPlatform.Web.Controllers
             var users = await userService.GetAllUsersAsync(isAdmin);
             return View(users);
         }
+        [HttpGet]
+
+        public async Task<IActionResult> Details(string Id)
+        {
+            if (string.IsNullOrEmpty(Id))
+            {
+                return BadRequest("User ID cannot be null or empty.");
+            }
+
+            bool isAdmin = User.IsInRole("Admin");
+            var userDetails = await userService.GetUserDetailsAsync(Id, isAdmin);
+            if (userDetails == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            return View(userDetails);
+        }
     }
 }

@@ -38,5 +38,37 @@ namespace FitnessPlatform.Services.Core
 
             
         }
+
+        public async Task<UserDetailsVM> GetUserDetailsAsync(string userId, bool isAdmin)
+        {
+            if(!isAdmin || string.IsNullOrEmpty(userId))
+            {
+                return null; // If not admin and no userId provided, return null
+            }
+            var user = await userManager.FindByIdAsync(userId);
+
+            
+            
+                UserDetailsVM details = new UserDetailsVM 
+                { 
+                   UserId = userId,
+                   FirstName = user.FirstName,
+                   LastName = user.LastName,
+                   Gender = user.Gender,
+                   PhoneNumber = user.PhoneNumber,
+                   DateOfBirth = user.DateOfBirth,
+                   HeightCm = user.HeightCm,
+                   WeightKg = user.WeightKg,
+                   ImageUrl = user.ImageUrl,
+                   
+
+                
+                };
+               
+
+            
+            return details;
+
+        }
     }
 }

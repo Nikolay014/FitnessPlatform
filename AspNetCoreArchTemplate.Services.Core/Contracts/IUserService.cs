@@ -1,4 +1,5 @@
-﻿using FitnessPlatform.Web.ViewModels.User;
+﻿using FitnessPlatform.Web.ViewModels.Gym;
+using FitnessPlatform.Web.ViewModels.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace FitnessPlatform.Services.Core.Contracts
     public interface IUserService
     {
         Task<IEnumerable<UserVM>> GetAllUsersAsync(bool isAdmin);
+        Task<UserDetailsVM> GetUserDetailsAsync(string userId, bool isAdmin);
     }
 }

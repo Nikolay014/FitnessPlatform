@@ -19,13 +19,17 @@
 
                     <div>
                         <h5 class="mb-1">@user.FullName</h5>
+                        <p><strong>Gender:</strong> @user.Id</p>
                         <p class="mb-1"><strong>Gender:</strong> @user.Gender</p>
                         <p class="mb-0"><strong>Phone:</strong> @user.PhoneNumber</p>
                     </div>
                 </div>
 
                 <div class="text-end">
-                    <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-warning btn-sm me-2">
+                    <a asp-controller="User" asp-action="MakeItTrainer" asp-route-id="@user.Id" class="btn btn-warning btn-sm me-2">
+                        <i class="fas fa-edit"></i> Make Trainer
+                    </a>
+                    <a asp-controller="User" asp-action="Details" asp-route-id="@user.Id" class="btn btn-warning btn-sm me-2">
                         <i class="fas fa-edit"></i> Details
                     </a>
                     <form asp-action="Delete" asp-route-id="@user.Id" method="post" class="d-inline">
