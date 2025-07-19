@@ -25,6 +25,7 @@ namespace AspNetCoreArchTemplate.Web
                     options.UseSqlServer(connectionString);
                 });
             builder.Services.AddScoped<IGymService, GymService>();
+            builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services
                 .AddDefaultIdentity<ApplicationUser>(options =>

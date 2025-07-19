@@ -204,3 +204,10 @@ padding: 0;
     padding: 15px;
     text-align: center;
 }
+.user-card {
+    transition: box-shadow 0.3s ease;
+}
+
+    .user-card:hover {
+        box-shadow: 0 0 12px rgba(0, 191, 255, 0.3);
+    }

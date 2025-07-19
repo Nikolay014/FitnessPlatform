@@ -26,7 +26,6 @@
 
         public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
 
-        public DbSet<ApplicationUser> WorkoutExercise { get; set; }
 
         public DbSet<Event> Events { get; set; }
 

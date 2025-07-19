@@ -34,6 +34,10 @@ namespace FitnessPlatform.Data.Models
         [MaxLength(12)]
         public string PhoneNumber { get; set; } = null!;
 
+        [Comment("Profile image URL of the user")]
+        [MaxLength(200)]
+        public string? ImageUrl { get; set; }
+
         [Comment("Date of birth")]
         [Required]
         public DateTime DateOfBirth { get; set; }
