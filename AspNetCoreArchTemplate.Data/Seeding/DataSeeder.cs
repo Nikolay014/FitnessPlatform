@@ -91,12 +91,12 @@ namespace FitnessPlatform.Data.Seeding
             {
                 var specialties = new List<Specialty>
                 {
-                    new Specialty { Id = 1, Name = "Cardio", Description = "Endurance training and heart health" },
-                    new Specialty { Id = 2, Name = "Strength Training", Description = "Building muscle mass" },
-                    new Specialty { Id = 3, Name = "Yoga", Description = "Flexibility and mindfulness" },
-                    new Specialty { Id = 4, Name = "Pilates", Description = "Core strength, posture, and flexibility" },
-                    new Specialty { Id = 5, Name = "CrossFit", Description = "High-intensity functional training" },
-                    new Specialty { Id = 6, Name = "HIIT", Description = "High-Intensity Interval Training for fat burning" }
+                    new Specialty { Name = "Cardio", Description = "Endurance training and heart health" },
+                    new Specialty { Name = "Strength Training", Description = "Building muscle mass" },
+                    new Specialty { Name = "Yoga", Description = "Flexibility and mindfulness" },
+                    new Specialty { Name = "Pilates", Description = "Core strength, posture, and flexibility" },
+                    new Specialty { Name = "CrossFit", Description = "High-intensity functional training" },
+                    new Specialty { Name = "HIIT", Description = "High-Intensity Interval Training for fat burning" }
                 };
 
                 dbContext.Specialties.AddRange(specialties);

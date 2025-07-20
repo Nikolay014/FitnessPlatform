@@ -12,5 +12,9 @@ namespace FitnessPlatform.Services.Core.Contracts
     {
         Task<IEnumerable<UserVM>> GetAllUsersAsync(bool isAdmin);
         Task<UserDetailsVM> GetUserDetailsAsync(string userId, bool isAdmin);
+
+        Task<CreateTrainerUserVM> GetUserForTrainerAsync(string userId, bool isAdmin);
+
+        Task CreateTrainerAsync(CreateTrainerUserVM model);
     }
 }

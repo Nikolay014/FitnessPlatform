@@ -1,5 +1,6 @@
 ﻿using FitnessPlatform.Services.Core;
 using FitnessPlatform.Services.Core.Contracts;
+using FitnessPlatform.Web.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -49,7 +50,21 @@ namespace FitnessPlatform.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> MakeItTrainer(string Id)
         {
-            return View();
+
+            bool isAdmin = User.IsInRole("Admin");
+            CreateTrainerUserVM user =  await userService.GetUserForTrainerAsync(Id, isAdmin);
+            return View(user);
+        }
+        [HttpPost]
+        public async Task<IActionResult> MakeItTrainer(CreateTrainerUserVM user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(user);
+            }
+            bool isAdmin = User.IsInRole("Admin");
+            await userService.CreateTrainerAsync(user);
+            return RedirectToAction("AllUsers", "User");
         }
     }
 }

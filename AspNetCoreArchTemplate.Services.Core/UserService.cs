@@ -23,6 +23,7 @@ namespace FitnessPlatform.Services.Core
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
+        
 
         public async Task<IEnumerable<UserVM>>GetAllUsersAsync(bool isAdmin)
         {
@@ -68,6 +69,46 @@ namespace FitnessPlatform.Services.Core
 
             
             return details;
+
+        }
+        public async Task CreateTrainerAsync(CreateTrainerUserVM model)
+        {
+            var user = await userManager.FindByIdAsync(model.UserId);
+            if (user != null)
+            {
+                var roles = await userManager.GetRolesAsync(user);
+                await userManager.RemoveFromRolesAsync(user, roles);
+                await userManager.AddToRoleAsync(user, "Trainer");
+            }
+            Trainer trainer = new Trainer
+            {
+                UserId = model.UserId,
+                GymId = model.GymId,
+                SpecialtyId = model.SpecialtyId,
+                TrainerImage = model.Image
+            };
+
+            dbContext.Trainers.Add(trainer);
+            await dbContext.SaveChangesAsync();
+        }
+        public async Task<CreateTrainerUserVM> GetUserForTrainerAsync(string userId, bool isAdmin)
+        {
+
+            if (!isAdmin || string.IsNullOrEmpty(userId))
+            {
+                return null; // If not admin and no userId provided, return null
+            }
+
+             var user =  await userManager
+                .FindByIdAsync(userId);
+            CreateTrainerUserVM createTrainerUserVM = new CreateTrainerUserVM
+            {
+                UserId = userId,
+                Image = user.ImageUrl,
+                Gyms = dbContext.Gym.ToList(),
+                Specialties = dbContext.Specialties.ToList(),
+            };
+            return createTrainerUserVM;
 
         }
     }
