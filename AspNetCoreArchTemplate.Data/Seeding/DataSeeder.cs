@@ -61,26 +61,48 @@ namespace FitnessPlatform.Data.Seeding
             if (!await dbContext.SubscriptionPlans.AnyAsync())
             {
                 var plans = new List<SubscriptionPlan>
-        {
-            new SubscriptionPlan
-            {
-                Name = "1 Month - Standard Plan",
-                DurationInDays = 30,
-                Price = 45,
-                Description = "Unlimited gym access, 1 SPA visit/week, 2 group sessions/month"
-            },
-            new SubscriptionPlan
-            {
-                Name = "1 Year - Standard Plan",
-                DurationInDays = 365,
-                Price = 399,
-                Description = "Unlimited gym access, unlimited SPA, 4 group sessions/month"
-            }
-        };
+                {
+                    new SubscriptionPlan
+                    {
+                        Name = "1 Month - Standard Plan",
+                        DurationInDays = 30,
+                        Price = 45,
+                        Description = "Unlimited gym access, 1 SPA visit/week, 2 group sessions/month"
+                    },
+                    new SubscriptionPlan
+                    {
+                        Name = "1 Year - Standard Plan",
+                        DurationInDays = 365,
+                        Price = 399,
+                        Description = "Unlimited gym access, unlimited SPA, 4 group sessions/month"
+                    }
+                };
 
                 dbContext.SubscriptionPlans.AddRange(plans);
                 await dbContext.SaveChangesAsync();
             }
         }
+        public static async Task SeedSpecialtiesAsync(IServiceProvider services)
+        {
+            using var scope = services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<FitnessDbContext>();
+
+            if (!await dbContext.Specialties.AnyAsync())
+            {
+                var specialties = new List<Specialty>
+                {
+                    new Specialty { Id = 1, Name = "Cardio", Description = "Endurance training and heart health" },
+                    new Specialty { Id = 2, Name = "Strength Training", Description = "Building muscle mass" },
+                    new Specialty { Id = 3, Name = "Yoga", Description = "Flexibility and mindfulness" },
+                    new Specialty { Id = 4, Name = "Pilates", Description = "Core strength, posture, and flexibility" },
+                    new Specialty { Id = 5, Name = "CrossFit", Description = "High-intensity functional training" },
+                    new Specialty { Id = 6, Name = "HIIT", Description = "High-Intensity Interval Training for fat burning" }
+                };
+
+                dbContext.Specialties.AddRange(specialties);
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
     }
 }

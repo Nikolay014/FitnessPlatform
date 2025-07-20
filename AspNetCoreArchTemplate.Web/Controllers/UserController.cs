@@ -46,5 +46,10 @@ namespace FitnessPlatform.Web.Controllers
 
             return View(userDetails);
         }
+        [HttpGet]
+        public async Task<IActionResult> MakeItTrainer(string Id)
+        {
+            return View();
+        }
     }
 }

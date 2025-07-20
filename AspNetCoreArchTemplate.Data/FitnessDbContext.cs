@@ -31,6 +31,8 @@
 
         public DbSet<Trainer> Trainers { get; set; }
 
+        public DbSet<Specialty> Specialties { get; set; }
+
         //public DbSet<TrainerSchedule> TrainerSchedules { get; set; }
 
         public DbSet<GymWorkingHours> GymWorkingHours { get; set; }

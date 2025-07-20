@@ -44,6 +44,7 @@ namespace AspNetCoreArchTemplate.Web
                 var services = scope.ServiceProvider;
                 await DataSeeder.SeedRolesAndAdminAsync(services);
                 await DataSeeder.SeedSubscriptionPlansAsync(services);
+                await DataSeeder.SeedSpecialtiesAsync(services);
             }
 
             if (app.Environment.IsDevelopment())

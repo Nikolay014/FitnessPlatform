@@ -23,9 +23,11 @@ namespace FitnessPlatform.Data.Models
         public Gym Gym { get; set; }
 
         [Required]
-        [MaxLength(100)]
         [Comment("Specialty of the trainer (e.g. Cardio, Strength, Yoga)")]
-        public string Specialty { get; set; } = null!;
+        public int SpecialtyId { get; set; }
+
+        [ForeignKey("SpecialtyId")]
+        public Specialty Specialty { get; set; } = null!;
         
 
         public virtual ICollection<TrainerClient> Clients { get; set; } = new List<TrainerClient>();
