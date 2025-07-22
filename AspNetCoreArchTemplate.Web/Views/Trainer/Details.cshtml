@@ -1,0 +1,35 @@
+﻿@using FitnessPlatform.Web.ViewModels.Trainer
+@model TrainerDetailsVM
+
+<div class="container mt-5">
+    <div class="card mx-auto shadow-lg p-4" style="max-width: 400px;">
+        <div class="text-center">
+            <img src="@(string.IsNullOrEmpty(Model.Image) ? Url.Content("~/images/default-avatar.jpg") : Model.Image)"
+                 class="rounded-circle mb-3"
+                 style="width: 120px; height: 120px; object-fit: cover;" alt="User Image" />
+
+            <h4>@Model.FullName</h4>
+            <p class="text-muted"><strong>Specialty:</strong>@Model.Specialty</p>
+            <p class="text-muted"><strong>Gym:</strong>@Model.Gym</p>
+        </div>
+
+        <hr />
+
+        <div>
+            <p><strong>Specialty Description:</strong> @Model.SpecialtyDescription</p>
+            <p><strong>Phone:</strong> @Model.PhoneNumber</p>
+            
+            
+        </div>
+
+        <div class="text-center mt-3">
+            <a asp-action="AllTrainers" class="btn btn-outline-secondary">← Back to All Trainers</a>
+        </div>
+        <div class="text-center mt-3">
+            <a asp-action="AllClients" class="btn btn-outline-primary">Clients</a>
+        </div>
+        <div class="text-center mt-3">
+            <a asp-action="AllEvents" class="btn btn-outline-success">Events</a>
+        </div>
+    </div>
+</div>

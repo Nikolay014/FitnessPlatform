@@ -26,6 +26,7 @@ namespace AspNetCoreArchTemplate.Web
                 });
             builder.Services.AddScoped<IGymService, GymService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ITrainerService, TrainerService>();
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services
                 .AddDefaultIdentity<ApplicationUser>(options =>
