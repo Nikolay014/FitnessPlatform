@@ -42,7 +42,7 @@
                                 <a class="nav-link text-white" asp-controller="Trainer" asp-action="AllTrainers">Trainers</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="Events" asp-action="Index">Events</a>
+                                <a class="nav-link text-white" asp-controller="Event" asp-action="AllEvents">Events</a>
                             </li>
 
                         }
@@ -61,7 +61,7 @@
                                 <a class="nav-link text-white" asp-controller="Trainers" asp-action="Index">Trainers</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="Events" asp-action="Index">Events</a>
+                                <a class="nav-link text-white" asp-controller="Events" asp-action="Events">Events</a>
                             </li>
                         }
                         else if (User?.Identity?.IsAuthenticated == true && User.IsInRole("User"))
@@ -79,7 +79,7 @@
                                 <a class="nav-link text-white" asp-controller="Trainers" asp-action="Index">Food and Workouts</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="Events" asp-action="Index">Events</a>
+                                <a class="nav-link text-white" asp-controller="Event" asp-action="AllEvents">Events</a>
                             </li>
                         }
                         else
@@ -91,7 +91,7 @@
                                 <a class="nav-link text-white" asp-controller="Gym" asp-action="AllGyms">Gyms</a>
                             </li>                         
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="Events" asp-action="Index">Events</a>
+                                <a class="nav-link text-white" asp-controller="Event" asp-action="AllEvents">Events</a>
                             </li>
                         }
 
