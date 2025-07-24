@@ -24,20 +24,43 @@
                         <p class="mb-0"><strong>Phone:</strong> @trainer.PhoneNumber</p>
                     </div>
                 </div>
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="text-end">
+                        <a asp-controller="Trainer" asp-action="RemoveTrainer" asp-route-id="@trainer.TrainerId" class="btn btn-warning btn-sm me-2">
+                            <i class="fas fa-edit"></i> Remove Trainer
+                        </a>
+                        <a asp-controller="Trainer" asp-action="Details" asp-route-id="@trainer.TrainerId" class="btn btn-warning btn-sm me-2">
+                            <i class="fas fa-edit"></i> Details
+                        </a>
+                        <form asp-action="Update" asp-route-id="@trainer.TrainerId" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-sm">
+                                <i class="fas fa-trash"></i> Update
+                            </button>
+                        </form>
+                    </div>
+                }
+                else if(User.IsInRole("Trainer"))
+				{
+					<div class="text-end">
+						<a asp-controller="Trainer" asp-action="Details" asp-route-id="@trainer.TrainerId" class="btn btn-warning btn-sm me-2">
+							<i class="fas fa-edit"></i> Details
+						</a>
+						
+					</div>
+				}
+                else if (User.IsInRole("User"))
+                {
+                    <div class="text-end">
+                        <a asp-controller="Trainer" asp-action="Details" asp-route-id="@trainer.TrainerId" class="btn btn-warning btn-sm me-2">
+                            <i class="fas fa-edit"></i> Details
+                        </a>
 
-                <div class="text-end">
-                    <a asp-controller="Trainer" asp-action="RemoveTrainer" asp-route-id="@trainer.TrainerId" class="btn btn-warning btn-sm me-2">
-                        <i class="fas fa-edit"></i> Remove Trainer
-                    </a>
-                    <a asp-controller="Trainer" asp-action="Details" asp-route-id="@trainer.TrainerId" class="btn btn-warning btn-sm me-2">
-                        <i class="fas fa-edit"></i> Details
-                    </a>
-                    <form asp-action="Update" asp-route-id="@trainer.TrainerId" method="post" class="d-inline">
-                        <button type="submit" class="btn btn-sm">
-                            <i class="fas fa-trash"></i> Update
-                        </button>
-                    </form>
-                </div>
+                    </div>
+                }
+
+
+               
             </div>
         </div>
     }

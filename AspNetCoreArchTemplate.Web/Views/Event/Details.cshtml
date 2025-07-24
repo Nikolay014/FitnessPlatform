@@ -1,0 +1,70 @@
+﻿@model FitnessPlatform.Web.ViewModels.Event.EventDetailsVM
+@{
+    ViewData["Title"] = "Gym Details";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg rounded gym-details-card">
+        <div class="row g-0">
+            
+            <div class="col-md-6">
+                @if (!string.IsNullOrEmpty(@Model.Image))
+                {
+                    <img src="@Model.Image" class="img-fluid rounded-start w-100" style="max-height: 400px; object-fit: cover;" alt="@Model.Name">
+                }
+                else
+                {
+                    <img src="~/images/default-image.jpg" class="img-fluid rounded-start w-100" style="max-height: 400px; object-fit: cover;" alt="No Image Available">
+                }
+            </div>
+
+            <!-- Детайли за фитнеса -->
+            <div class="col-md-6 d-flex flex-column p-4">
+                <h2 class="mb-3">@Model.Name</h2>
+                <p class="mb-2 text-muted"><strong>Location:</strong> @Model.GymName</p>
+                <p class="mb-2 text-muted"><strong>Trainer:</strong> @Model.TrainerFullName</p>
+                <p class="card-text">Time: @Model.StartDate - @Model.EndDate</p>
+                <p class="mb-4">@Model.Description</p>
+
+                <div class="mt-auto d-flex flex-column gap-2">
+                    @if (Model.IsAdmin)
+                    {
+                        <div class="d-flex gap-2">
+                            <a asp-action="Update" asp-route-id="@Model.Id" class="btn btn-warning btn-rounded w-50">Edit</a>
+                            <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="w-50">
+                                <button type="submit" class="btn btn-danger btn-rounded w-100">Delete</button>
+                            </form>
+                        </div>
+                    }
+                    else if (User.IsInRole("Trainer"))
+                    {
+                        <a asp-action="ViewSubscribers" asp-route-id="@Model.Id" class="btn btn-warning btn-rounded w-50">View Subscribers</a>
+                    }
+                    else if (User?.Identity?.IsAuthenticated == false)
+                    {
+
+                    }
+                    else if (!Model.IsUserSubscribed)
+                    {
+                        <form asp-action="Subscribe" asp-route-id="@Model.Id" method="get">
+                            <button type="submit" class="btn btn-success btn-rounded w-100">Subscribe</button>
+                        </form>
+                    }
+                    else if (Model.IsUserSubscribed)
+                    {
+                        <form asp-action="RemoveSubscription" asp-route-id="@Model.Id" method="post" class="w-50">
+                            <button type="submit" class="btn btn-danger btn-rounded w-100">Remove Subscription</button>
+                        </form>
+                    }
+
+                   @*  else
+                    {
+                        <span class="text-success mt-2">✅ You are subscribed to this event.</span>
+                    } *@
+
+                    <a asp-action="AllEvents" class="btn btn-outline-secondary btn-rounded mt-3">← Back to All Events</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

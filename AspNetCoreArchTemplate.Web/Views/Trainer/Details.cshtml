@@ -22,14 +22,46 @@
             
         </div>
 
-        <div class="text-center mt-3">
-            <a asp-action="AllTrainers" class="btn btn-outline-secondary">← Back to All Trainers</a>
-        </div>
-        <div class="text-center mt-3">
-            <a asp-action="AllClients" class="btn btn-outline-primary">Clients</a>
-        </div>
-        <div class="text-center mt-3">
-            <a asp-action="AllEvents" class="btn btn-outline-success">Events</a>
-        </div>
+        @if (User.IsInRole("Admin") || User.IsInRole("Trainer"))
+        {
+            <div class="text-center mt-3">
+                <a asp-action="AllTrainers" class="btn btn-outline-secondary">← Back to All Trainers</a>
+            </div>
+            <div class="text-center mt-3">
+                <a asp-action="AllClients" class="btn btn-outline-primary">Clients</a>
+            </div>
+            <div class="text-center mt-3">
+                <a asp-action="AllEvents" class="btn btn-outline-success">Events</a>
+            </div>
+        }
+        else if (User.IsInRole("User"))
+        {
+            @if (!Model.IsUserSubscribe)
+            {
+                <div class="text-center mt-3">
+                    <a asp-action="AllTrainers" class="btn btn-outline-secondary">← Back to All Trainers</a>
+                </div>
+                <div class="text-center mt-3">
+                    <a asp-action="SubscribeToTrainer" asp-route-id="@Model.TrainerId" class="btn btn-outline-primary">Subscribe to Trainer</a>
+                </div>
+                <div class="text-center mt-3">
+                    <a asp-action="AllEvents" class="btn btn-outline-success">Events</a>
+                </div>
+            }
+            else
+            {
+                <div class="text-center mt-3">
+                    <a asp-action="AllTrainers" class="btn btn-outline-secondary">← Back to All Trainers</a>
+                </div>
+                <div class="text-center mt-3">
+                    <a asp-action="UnsubscribeToTrainer" asp-route-id="@Model.TrainerId" class="btn btn-outline-primary">Unsubscribe to Trainer</a>
+                </div>
+                <div class="text-center mt-3">
+                    <a asp-action="AllEvents" class="btn btn-outline-success">Events</a>
+                </div>
+            }
+        }
+
+       
     </div>
 </div>

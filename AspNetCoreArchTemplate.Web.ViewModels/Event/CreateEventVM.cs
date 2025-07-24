@@ -18,6 +18,8 @@ namespace FitnessPlatform.Web.ViewModels.Event
         [Required]
         public int GymId { get; set; }
 
+        public string? Description { get; set; }
+
 
         [Required]
         public int TrainerId { get; set; }

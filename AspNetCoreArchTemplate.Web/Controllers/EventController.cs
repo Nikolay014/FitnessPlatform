@@ -57,7 +57,8 @@ namespace FitnessPlatform.Web.Controllers
             }
 
             string? userId = GetUserId();
-            EventDetailsVM eventDetails = await eventService.GetEventDetailsAsync(id, userId);
+            bool isAdmin = User.IsInRole("Admin");
+            EventDetailsVM eventDetails = await eventService.GetEventDetailsAsync(id, userId,isAdmin);
             if (eventDetails == null)
             {
                 return NotFound("Event not found.");

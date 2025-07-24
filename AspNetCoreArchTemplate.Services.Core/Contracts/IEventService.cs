@@ -16,7 +16,7 @@ namespace FitnessPlatform.Services.Core.Contracts
 
         Task<CreateEventVM> GetGymsAndTrainersAsync();
 
-        Task<EventDetailsVM> GetEventDetailsAsync(int eventId,string userId);
+        Task<EventDetailsVM> GetEventDetailsAsync(int eventId,string userId,bool isAdmin);
 
         
     }

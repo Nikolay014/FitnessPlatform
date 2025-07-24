@@ -42,12 +42,13 @@ namespace FitnessPlatform.Services.Core
             return trainer;
         }
 
-        public async Task<TrainerDetailsVM> GetTrainerDetailsAsync(int userId, bool isAdmin)
+        public async Task<TrainerDetailsVM> GetTrainerDetailsAsync(int trainerId,string userId, bool isAdmin)
         {
-            var trainer = await dbContext.Trainers.Where(t => t.Id == userId)
+            var trainer = await dbContext.Trainers.Where(t => t.Id == trainerId)
                 .Include(t => t.User)
                 .Include(t => t.Gym)
                 .Include(t => t.Specialty)
+                .Include(t => t.Clients)
                 .FirstOrDefaultAsync();
             if (trainer == null)
             {
@@ -63,7 +64,8 @@ namespace FitnessPlatform.Services.Core
                 Image = trainer.TrainerImage,
                 Specialty = trainer.Specialty.Name,
                 SpecialtyDescription = trainer.Specialty.Description,
-                PhoneNumber = trainer.User.PhoneNumber
+                PhoneNumber = trainer.User.PhoneNumber,
+                IsUserSubscribe = trainer.Clients.Any(c=>c.ClientId == userId)
             };
             return trainerDetails;
 
@@ -89,5 +91,35 @@ namespace FitnessPlatform.Services.Core
             dbContext.Trainers.Remove(trainer);
             await dbContext.SaveChangesAsync();
         }
+
+        public async Task UserSubscribeToTrainer(int trainerId, string userId)
+        {
+            var trainer = await dbContext.Trainers
+         .Include(t => t.User)
+         .FirstOrDefaultAsync(t => t.Id == trainerId);
+
+            if (trainer == null)
+            {
+                throw new ArgumentException("Trainer not found.");
+            }
+
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                throw new ArgumentException("User not found.");
+            }
+
+            TrainerClient trainerClient = new TrainerClient
+            {
+                TrainerId = trainer.Id,
+                Trainer = trainer, // това е ключово
+                ClientId = userId
+            };
+
+            dbContext.TrainerClients.Add(trainerClient);
+            await dbContext.SaveChangesAsync();
+        }
+
     }
+    
 }

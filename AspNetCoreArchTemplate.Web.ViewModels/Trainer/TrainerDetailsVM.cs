@@ -22,6 +22,8 @@ namespace FitnessPlatform.Web.ViewModels.Trainer
 
         public string Gym { get; set; }
 
-       
+        public bool IsUserSubscribe { get; set; }
+
+
     }
 }

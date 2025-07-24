@@ -32,6 +32,7 @@ namespace FitnessPlatform.Services.Core
                 Image = model.Image,
                 GymId = model.GymId,
                 TrainerId = model.TrainerId,
+                Description = model.Description,
                 StartDate = DateTime.Parse($"{model.StartDate} {model.StartTime}"),
                 EndDate = DateTime.Parse($"{model.EndDate} {model.EndTime}"),
             };
@@ -63,9 +64,35 @@ namespace FitnessPlatform.Services.Core
             return eventVM;
         }
 
-        public Task<EventDetailsVM> GetEventDetailsAsync(int eventId, string userId)
+        public async Task<EventDetailsVM> GetEventDetailsAsync(int eventId, string userId,bool isAdmin)
         {
-            throw new NotImplementedException();
+            var @event = await dbContext.Events
+                .Include(e => e.Gym)
+                .Include(e => e.Trainer)
+                    .ThenInclude(t => t.User) 
+                .Include(e => e.Registrations)
+                    .ThenInclude(r => r.User)
+                .FirstOrDefaultAsync(e => e.Id == eventId);
+
+
+            if (@event == null) throw new ArgumentException("Gym not found.");
+
+            EventDetailsVM eventDetails = new EventDetailsVM
+            {
+                Id = @event.Id,
+                Name = @event.Title,
+                GymName = @event.Gym.Name,
+                TrainerFullName = $"{@event.Trainer.User.FirstName} {@event.Trainer.User.LastName}",
+                StartDate = @event.StartDate.ToString("dd/MM/yyyy HH:mm"),
+                EndDate = @event.EndDate.ToString("dd/MM/yyyy HH:mm"),
+                Description = @event.Description,
+                Image = @event.Image,
+                IsUserSubscribed = @event.Registrations.Any(s => s.UserId == userId),
+                IsAdmin = isAdmin
+            };
+           
+
+            return eventDetails;
         }
 
         public async Task<CreateEventVM> GetGymsAndTrainersAsync()
