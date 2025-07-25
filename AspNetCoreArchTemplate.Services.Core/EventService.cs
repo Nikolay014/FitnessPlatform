@@ -41,6 +41,8 @@ namespace FitnessPlatform.Services.Core
             await dbContext.SaveChangesAsync();
         }
 
+        
+
         public async Task<IEnumerable<EventVM>> GetEventAsync(string? userId)
         {
             var eventVM = await dbContext.Events
@@ -93,6 +95,60 @@ namespace FitnessPlatform.Services.Core
            
 
             return eventDetails;
+        }
+
+        public async Task<EditEventVM> GetEventForEditAsync(int id)
+        {
+            Event @event = await dbContext.Events
+            
+            .FirstOrDefaultAsync(e => e.Id == id);
+
+            var trainers = await dbContext.Trainers
+               .Include(t => t.User)
+               .Select(t => new TrainerDropdownVM
+               {
+                   Id = t.Id,
+                   FullName = t.User.FirstName + " " + t.User.LastName
+               })
+               .ToListAsync();
+
+            var gyms = await dbContext.Gym.ToListAsync();
+
+            return new EditEventVM
+            {
+                Id = @event.Id,
+                Title = @event.Title,
+                Image = @event.Image,
+                Description = @event.Description,
+                GymId = @event.GymId,
+                TrainerId = @event.TrainerId,
+                StartDate = @event.StartDate.ToString("yyyy-MM-dd"),
+                StartTime = @event.StartDate.ToString("HH:mm"),
+                EndDate = @event.EndDate.ToString("yyyy-MM-dd"),
+                EndTime = @event.EndDate.ToString("HH:mm"),
+                Gyms = gyms,
+                TrainersDropdown = trainers,
+            };
+        }
+        public async Task EditEventAsync(EditEventVM model)
+        {
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model), "Event model cannot be null.");
+            }
+            Event @event = dbContext.Events.FirstOrDefault(e => e.Id == model.Id);
+
+            @event.Title = model.Title;
+            @event.Image = model.Image;
+            @event.Description = model.Description;
+            @event.GymId = model.GymId;
+            @event.TrainerId = model.TrainerId;
+            @event.StartDate = DateTime.Parse($"{model.StartDate} {model.StartTime}");
+            @event.EndDate = DateTime.Parse($"{model.EndDate} {model.EndTime}");
+
+
+
+            await dbContext.SaveChangesAsync();
         }
 
         public async Task<CreateEventVM> GetGymsAndTrainersAsync()

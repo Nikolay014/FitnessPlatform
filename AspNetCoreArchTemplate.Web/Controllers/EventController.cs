@@ -66,5 +66,33 @@ namespace FitnessPlatform.Web.Controllers
 
             return View(eventDetails);
         }
+        [Authorize(Roles = "Admin,Trainer")]
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            if (id == null)
+            {
+                return BadRequest("Event ID cannot be null or empty.");
+            }
+
+            EditEventVM editEventVM = await eventService.GetEventForEditAsync(id);
+            if (editEventVM == null)
+            {
+                return NotFound("Event not found.");
+            }
+            return View(editEventVM);
+        }
+        [HttpPost]
+        [Authorize(Roles = "Admin,Trainer")]
+        public async Task<IActionResult> Edit(EditEventVM editEventVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(editEventVM);
+            }
+            await eventService.EditEventAsync(editEventVM);
+
+            return RedirectToAction("AllEvents", "Event");
+        }
     }
 }

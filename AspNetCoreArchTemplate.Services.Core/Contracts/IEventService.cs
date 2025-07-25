@@ -18,6 +18,10 @@ namespace FitnessPlatform.Services.Core.Contracts
 
         Task<EventDetailsVM> GetEventDetailsAsync(int eventId,string userId,bool isAdmin);
 
-        
+        Task<EditEventVM> GetEventForEditAsync(int id);
+
+        Task EditEventAsync(EditEventVM model);
+
+
     }
 }

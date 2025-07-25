@@ -63,5 +63,14 @@ namespace FitnessPlatform.Web.Controllers
             await trainerService.UserSubscribeToTrainer(id, userId);
             return RedirectToAction("AllTrainers","Trainer");
         }
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> UnsubscribeToTrainer(int id)
+        {
+            string? userId = GetUserId();
+
+            await trainerService.UnUserSubscribeToTrainer(id, userId);
+            return RedirectToAction("AllTrainers", "Trainer");
+        }
+
     }
 }

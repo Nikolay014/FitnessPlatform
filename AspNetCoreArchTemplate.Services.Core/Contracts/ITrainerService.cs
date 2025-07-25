@@ -19,6 +19,8 @@ namespace FitnessPlatform.Services.Core.Contracts
 
         Task UserSubscribeToTrainer(int trainerId, string userId);
 
-        
+        Task UnUserSubscribeToTrainer(int trainerId, string userId);
+
+
     }
 }

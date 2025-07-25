@@ -92,6 +92,19 @@ namespace FitnessPlatform.Services.Core
             await dbContext.SaveChangesAsync();
         }
 
+        public async Task UnUserSubscribeToTrainer(int trainerId, string userId)
+        {
+            var trainerClient = await dbContext.TrainerClients
+                .FirstOrDefaultAsync(tc => tc.TrainerId == trainerId && tc.ClientId == userId);
+
+            if (trainerClient == null)
+                {
+                throw new ArgumentException("Subscription not found.");
+            }
+             dbContext.TrainerClients.Remove(trainerClient);
+            dbContext.SaveChangesAsync();
+        }
+
         public async Task UserSubscribeToTrainer(int trainerId, string userId)
         {
             var trainer = await dbContext.Trainers

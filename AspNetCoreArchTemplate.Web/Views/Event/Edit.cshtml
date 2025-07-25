@@ -1,0 +1,77 @@
+﻿@using FitnessPlatform.Web.ViewModels.Event
+@model EditEventVM
+
+@{
+    ViewData["Title"] = "Create Event";
+}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card shadow-lg border-0 p-4" style="width: 100%; max-width: 500px;">
+        <div class="card-body">
+            <h3 class="card-title text-center mb-4">
+                <i class="bi bi-person-plus-fill me-2"></i>Edit Event
+            </h3>
+
+            <form asp-action="Edit" method="post">
+                <input asp-for="Id" type="hidden" />
+
+
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label">Title</label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Image" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Image" class="form-label">Trainer Image URL</label>
+                    <input asp-for="Image" class="form-control" placeholder="https://example.com/image.jpg" />
+                    <span asp-validation-for="Image" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="GymId" class="form-label">Select Gym</label>
+                    <select asp-for="GymId" asp-items="@(new SelectList(Model.Gyms, "Id", "Name"))" class="form-select"></select>
+                    <span asp-validation-for="GymId" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="TrainerId" class="form-label">Select Trainer</label>
+                    <select asp-for="TrainerId" class="form-select"
+                            asp-items="@(new SelectList(Model.TrainersDropdown, "Id", "FullName"))">
+                        <option disabled selected>-- Select a trainer --</option>
+                    </select>
+                    <span asp-validation-for="TrainerId" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <input type="text" name="Description" class="form-control" placeholder="Not required" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Start Date</label>
+                    <input type="date" name="StartDate" class="form-control" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Start Time</label>
+                    <input type="time" name="StartTime" class="form-control" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">End Date</label>
+                    <input type="date" name="EndDate" class="form-control" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">End Time</label>
+                    <input type="time" name="EndTime" class="form-control" required />
+                </div>
+
+                <button type="submit" class="btn btn-success w-100">
+                    <i class="bi bi-check-circle-fill me-1"></i> Create Event
+                </button>
+            </form>
+        </div>
+    </div>
+
