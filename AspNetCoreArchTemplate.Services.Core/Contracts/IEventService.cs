@@ -22,6 +22,10 @@ namespace FitnessPlatform.Services.Core.Contracts
 
         Task EditEventAsync(EditEventVM model);
 
+        Task<DeleteEventVM> GetEventForDeleteAsync(int id, string? userId, bool isAdmin);
+
+        Task DeleteEventAsync(int eventId);
+
 
     }
 }

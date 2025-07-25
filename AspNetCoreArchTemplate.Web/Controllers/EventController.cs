@@ -94,5 +94,31 @@ namespace FitnessPlatform.Web.Controllers
 
             return RedirectToAction("AllEvents", "Event");
         }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            string? userId = GetUserId();
+            bool isAdmin = User.IsInRole("Admin");
+            DeleteEventVM deleteGymVM = await eventService.GetEventForDeleteAsync(id, userId, isAdmin);
+            if (deleteGymVM == null)
+            {
+                return RedirectToAction("AllEvents", "Event");
+            }
+            return View(deleteGymVM);
+        }
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ConfirmDelete(int id)
+        {
+            string? userId = GetUserId();
+            bool isAdmin = User.IsInRole("Admin");
+
+            if (!isAdmin || userId == null)
+            {
+                return Unauthorized();
+            }
+            await eventService.DeleteEventAsync(id);
+            return RedirectToAction("AllEvents", "Event");
+        }
     }
 }

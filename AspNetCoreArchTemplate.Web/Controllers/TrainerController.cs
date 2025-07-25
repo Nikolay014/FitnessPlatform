@@ -3,6 +3,7 @@ using FitnessPlatform.Services.Core.Contracts;
 using FitnessPlatform.Web.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 
 namespace FitnessPlatform.Web.Controllers
@@ -51,9 +52,17 @@ namespace FitnessPlatform.Web.Controllers
         {
 
             bool isAdmin = User.IsInRole("Admin");
-            await trainerService.RemoveTrainer(Id, isAdmin);
+            try
+            {
+                await trainerService.RemoveTrainer(Id, isAdmin);
+                TempData["SuccessMessage"] = "Trainer removed successfully.";
+            }
+            catch (DbUpdateException)
+            {
+                TempData["ErrorMessage"] = "Trainer cannot be removed because they are assigned to events.";
+            }
 
-           return RedirectToAction("AllTrainers", "Trainer");
+            return RedirectToAction("AllTrainers");
         }
         [Authorize(Roles = "User")]
         public async Task<IActionResult> SubscribeToTrainer(int id)

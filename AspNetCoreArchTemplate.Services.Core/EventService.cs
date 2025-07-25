@@ -170,5 +170,44 @@ namespace FitnessPlatform.Services.Core
                 TrainersDropdown = trainers
             };
         }
+
+        public async Task<DeleteEventVM> GetEventForDeleteAsync(int id, string? userId, bool isAdmin)
+        {
+            var eventVM = await dbContext.Events
+              .AsNoTracking()
+              .Where(e => e.Id == id)
+              .Select(e => new DeleteEventVM
+              {
+                  Id = e.Id,
+                  Title = e.Title,
+                  IsAdmin = isAdmin,
+
+              })
+              .FirstOrDefaultAsync();
+
+            // Проверка за съществуване и достъп
+            if (eventVM == null || (!isAdmin))
+            {
+                return null;
+            }
+
+            return eventVM;
+        }
+
+        public async Task DeleteEventAsync(int eventId)
+        {
+            Event? @event = await dbContext.Events
+              .Where(e => e.Id == eventId)
+              .FirstOrDefaultAsync();
+
+            if (@event == null)
+                return;
+
+            // Проверка за достъп, ако userId е подаден
+
+            dbContext.Events.Remove(@event);
+            
+            await dbContext.SaveChangesAsync();
+        }
     }
 }
