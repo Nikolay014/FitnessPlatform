@@ -1,4 +1,5 @@
 ﻿using FitnessPlatform.Web.ViewModels.Gym;
+using FitnessPlatform.Web.ViewModels.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,10 @@ namespace FitnessPlatform.Services.Core.Contracts
         Task<SubscribeGymVM> GetSubscriptionPlansAsync(int id);
 
         Task SubscribeToGymAsync(int gymId, string userId, int planId);
+
+        Task<GymWithSubscribersVM> GetSubscribedUsersAsync(int id, string userId);
+
+        Task<GymWithTrainersVM> GetGymTrainersAsync(int id, string userId);
 
     }
 }

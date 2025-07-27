@@ -201,5 +201,77 @@ namespace FitnessPlatform.Services.Core
             dbContext.UserGymSubscription.Add(userGymSubscription);
             await dbContext.SaveChangesAsync();
         }
+
+        public async  Task<GymWithSubscribersVM> GetSubscribedUsersAsync(int id, string userId)
+        {
+            if (id == null)
+            {
+                throw new ArgumentException("Invalid gym ID.");
+            }
+            var gym = await dbContext.Gym.FirstOrDefaultAsync(g => g.Id == id);
+
+           
+
+            var users = await dbContext.UserGymSubscription
+                .Where(s => s.GymId == id)
+                .Include(s => s.User)
+                .Select(s => new SubscribeUserVM
+                {
+                    Id = s.UserId,
+                    FullName = s.User.FirstName + " " + s.User.LastName,
+                    Image = s.User.ImageUrl,
+                    PhoneNumber = s.User.PhoneNumber,
+                    Gender = s.User.Gender,
+                    SubscriptionEndDate = s.ValidUntil,
+                    
+                })
+                .ToListAsync();
+
+            var vm = new GymWithSubscribersVM
+            {
+                GymName = gym.Name,
+                Users = users
+            };
+
+            return vm;
+        }
+
+        public async Task<GymWithTrainersVM> GetGymTrainersAsync(int id, string userId)
+        {
+            if (id == null)
+            {
+                throw new ArgumentException("Invalid gym ID.");
+            }
+            var gym = await dbContext.Gym
+                 .Include(g => g.Trainers)
+                     .ThenInclude(t => t.User)
+                 .Include(g => g.Trainers)
+                     .ThenInclude(t => t.Specialty)
+                 .FirstOrDefaultAsync(g => g.Id == id);
+
+
+
+            var trainers =  gym.Trainers
+                .Select(s => new GymTrainersVM
+                {
+                    TrainerId = s.Id,
+                    FullName = s.User.FirstName + " " + s.User.LastName,
+                    Image = s.TrainerImage,
+                    Specialty = s.Specialty.Name,
+                    PhoneNumber = s.User.PhoneNumber,
+                   
+                    
+
+                })
+                .ToList();
+
+            var vm = new GymWithTrainersVM
+            {
+                GymName = gym.Name,
+                Trainers = trainers
+            };
+
+            return vm;
+        }
     }
 }

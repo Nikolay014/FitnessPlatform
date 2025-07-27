@@ -46,6 +46,7 @@ namespace FitnessPlatform.Services.Core
         public async Task<IEnumerable<EventVM>> GetEventAsync(string? userId)
         {
             var eventVM = await dbContext.Events
+                .Where(e=>e.StartDate < DateTime.UtcNow)
                .Select(e => new EventVM
                {
                    Id = e.Id,
@@ -209,5 +210,67 @@ namespace FitnessPlatform.Services.Core
             
             await dbContext.SaveChangesAsync();
         }
+
+        public async Task SubscribeEventAsync(int id, string userId)
+        {
+            EventRegistration eventRegistration = new EventRegistration() 
+            {
+                UserId = userId,
+                EventId = id
+            };
+
+            dbContext.EventRegistrations.Add(eventRegistration);
+            await dbContext.SaveChangesAsync();
+
+        }
+
+        public async Task RemoveSubscriptionAsync(int id, string userId)
+        {
+            EventRegistration eventRegistration = dbContext.EventRegistrations.FirstOrDefault(er => er.EventId == id && er.UserId == userId);
+
+            if (eventRegistration == null)
+            {
+                throw new ArgumentNullException("Invalid event");
+            }
+
+            dbContext.EventRegistrations.Remove(eventRegistration);
+            await dbContext.SaveChangesAsync();
+
+        }
+
+        public async Task<EventWithSubscribersVM> GetSubscribedUsersAsync(int id,string userId)
+        {
+            if (id == null)
+            {
+                throw new ArgumentException("Invalid event ID.");
+            }
+            var @event = await dbContext.Events.FirstOrDefaultAsync(e => e.Id == id);
+
+
+
+            var users = await dbContext.EventRegistrations
+                .Where(s => s.EventId == id)
+                .Include(s => s.User)
+                .Select(s => new SubscribedEventUserVM
+                {
+                    Id = s.UserId,
+                    FullName = s.User.FirstName + " " + s.User.LastName,
+                    Image = s.User.ImageUrl,
+                    PhoneNumber = s.User.PhoneNumber,
+                    Gender = s.User.Gender,
+                   
+
+                })
+                .ToListAsync();
+
+            var vm = new EventWithSubscribersVM
+            {
+                EvenName = @event.Title,
+                Users = users
+            };
+
+            return vm;
+        }
     }
+    
 }

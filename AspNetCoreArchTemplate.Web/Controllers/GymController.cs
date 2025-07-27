@@ -22,10 +22,10 @@ namespace FitnessPlatform.Web.Controllers
 
         public async Task<IActionResult> AllGyms()
         {
-           string? userId = GetUserId();
-           IEnumerable<GymVM> gyms = await gymService.GetGymsAsync(userId);
+            string? userId = GetUserId();
+            IEnumerable<GymVM> gyms = await gymService.GetGymsAsync(userId);
             return View(gyms);
-            
+
         }
         [Authorize(Roles = "Admin")]
 
@@ -33,7 +33,7 @@ namespace FitnessPlatform.Web.Controllers
         public async Task<IActionResult> Create()
         {
             CreateGymVM createGymVM = new CreateGymVM();
-           return View(createGymVM);
+            return View(createGymVM);
         }
         [HttpPost]
         [Authorize(Roles = "Admin")]
@@ -55,9 +55,9 @@ namespace FitnessPlatform.Web.Controllers
             {
                 return BadRequest("Gym ID cannot be null or empty.");
             }
-            
 
-            string? userId = GetUserId(); 
+
+            string? userId = GetUserId();
             bool isAdmin = User.IsInRole("Admin");
 
             var gymDetails = await gymService.GetGymDetailsAsync(id, userId, isAdmin);
@@ -73,7 +73,7 @@ namespace FitnessPlatform.Web.Controllers
         {
             string? userId = GetUserId();
             bool isAdmin = User.IsInRole("Admin");
-            DeleteGymVM deleteGymVM = await gymService.GetGymForDeleteAsync(id, userId,isAdmin);
+            DeleteGymVM deleteGymVM = await gymService.GetGymForDeleteAsync(id, userId, isAdmin);
             if (deleteGymVM == null)
             {
                 return RedirectToAction("AllGyms", "Gym");
@@ -81,12 +81,12 @@ namespace FitnessPlatform.Web.Controllers
             return View(deleteGymVM);
         }
         [Authorize(Roles = "Admin")]
-        public async  Task<IActionResult> ConfirmDelete(int id)
+        public async Task<IActionResult> ConfirmDelete(int id)
         {
             string? userId = GetUserId();
             bool isAdmin = User.IsInRole("Admin");
 
-            if (!isAdmin  || userId == null)
+            if (!isAdmin || userId == null)
             {
                 return Unauthorized();
             }
@@ -113,11 +113,11 @@ namespace FitnessPlatform.Web.Controllers
             {
                 return View(editGymVM);
             }
-             await gymService.EditGymAsync(editGymVM);
+            await gymService.EditGymAsync(editGymVM);
             return RedirectToAction("AllGyms", "Gym");
 
         }
-        [Authorize(Roles ="User")]
+        [Authorize(Roles = "User")]
         [HttpGet]
         public async Task<IActionResult> Subscribe(int id)
         {
@@ -139,6 +139,22 @@ namespace FitnessPlatform.Web.Controllers
             await gymService.SubscribeToGymAsync(gymId, userId, planId);
             return RedirectToAction("AllGyms", "Gym");
         }
+        [Authorize(Roles = "Admin,Trainer")]
+        [HttpGet]
+        public async Task<IActionResult> AllSubscribeUsers(int id)
+        {
+            string? userId = GetUserId();
 
+            var subscribedUsers = await gymService.GetSubscribedUsersAsync(id, userId);
+            return View(subscribedUsers);
+        }
+        public async Task<IActionResult> AllGymTrainers(int id)
+        {
+            string? userId = GetUserId();
+
+            var gymTrainers = await gymService.GetGymTrainersAsync(id, userId);
+            return View(gymTrainers);
+
+        }
     }
 }

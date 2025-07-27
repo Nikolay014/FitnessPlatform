@@ -2,6 +2,7 @@
 using FitnessPlatform.Services.Core.Contracts;
 using FitnessPlatform.Web.ViewModels.Event;
 using FitnessPlatform.Web.ViewModels.Gym;
+using FitnessPlatform.Web.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,6 +45,33 @@ namespace FitnessPlatform.Web.Controllers
             {
                 return View(createEventVM);
             }
+
+            // Парсваме датата и часа от string към DateTime
+            if (!DateTime.TryParse($"{createEventVM.StartDate} {createEventVM.StartTime}", out var startDateTime))
+            {
+                ModelState.AddModelError(string.Empty, "Invalid start date or time.");
+                return View(createEventVM);
+            }
+
+            if (startDateTime < DateTime.Now)
+            {
+                ModelState.AddModelError(string.Empty, "Start time must be in the future.");
+                return View(createEventVM);
+            }
+
+            // Същото може да се направи и за EndDate + EndTime, ако искаш:
+            if (!DateTime.TryParse($"{createEventVM.EndDate} {createEventVM.EndTime}", out var endDateTime))
+            {
+                ModelState.AddModelError(string.Empty, "Invalid end date or time.");
+                return View(createEventVM);
+            }
+
+            if (endDateTime <= startDateTime)
+            {
+                ModelState.AddModelError(string.Empty, "End time must be after start time.");
+                return View(createEventVM);
+            }
+
             await eventService.CreateEventAsync(createEventVM);
 
             return RedirectToAction("AllEvents", "Event");
@@ -120,5 +148,38 @@ namespace FitnessPlatform.Web.Controllers
             await eventService.DeleteEventAsync(id);
             return RedirectToAction("AllEvents", "Event");
         }
+        [Authorize(Roles = "User")]
+        public async Task <IActionResult> Subscribe(int id)
+        {
+            string userId = GetUserId();
+
+            if(userId == null)
+            {
+                return Unauthorized();
+            }
+            await eventService.SubscribeEventAsync(id, userId);
+            return RedirectToAction("AllEvents", "Event");
+        }
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> RemoveSubscription(int id)
+        {
+            string userId = GetUserId();
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            await eventService.RemoveSubscriptionAsync(id,userId);
+            return RedirectToAction("AllEvents", "Event");
+
+        }
+        [Authorize(Roles = "Admin,Trainer")]
+        public async Task<IActionResult> GetSubcribedUsers(int id)
+        {
+            string? userId = GetUserId();
+            EventWithSubscribersVM users = await eventService.GetSubscribedUsersAsync(id,userId);
+            return View(users);
+        }
+
+
     }
 }

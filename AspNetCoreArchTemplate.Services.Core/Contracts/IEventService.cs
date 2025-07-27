@@ -1,5 +1,6 @@
 ﻿using FitnessPlatform.Web.ViewModels.Event;
 using FitnessPlatform.Web.ViewModels.Gym;
+using FitnessPlatform.Web.ViewModels.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,8 @@ namespace FitnessPlatform.Services.Core.Contracts
         Task<DeleteEventVM> GetEventForDeleteAsync(int id, string? userId, bool isAdmin);
 
         Task DeleteEventAsync(int eventId);
-
-
+        Task SubscribeEventAsync(int id, string userId);
+        Task RemoveSubscriptionAsync(int id, string userId);
+        Task<EventWithSubscribersVM> GetSubscribedUsersAsync(int id,string userId);
     }
 }

@@ -52,7 +52,7 @@
                     }
                     else if (Model.IsUserSubscribed)
                     {
-                        <form asp-action="RemoveSubscription" asp-route-id="@Model.Id" method="post" class="w-50">
+                        <form asp-action="RemoveSubscription" asp-route-id="@Model.Id" method="post">
                             <button type="submit" class="btn btn-danger btn-rounded w-100">Remove Subscription</button>
                         </form>
                     }
