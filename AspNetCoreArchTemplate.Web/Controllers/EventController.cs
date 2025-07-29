@@ -179,6 +179,7 @@ namespace FitnessPlatform.Web.Controllers
             EventWithSubscribersVM users = await eventService.GetSubscribedUsersAsync(id,userId);
             return View(users);
         }
+        
 
 
     }

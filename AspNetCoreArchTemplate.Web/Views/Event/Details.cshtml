@@ -34,11 +34,12 @@
                             <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="w-50">
                                 <button type="submit" class="btn btn-danger btn-rounded w-100">Delete</button>
                             </form>
+                            <a asp-action="GetSubcribedUsers" asp-route-id="@Model.Id" class="btn btn-warning btn-rounded w-100">View Subscribers</a>
                         </div>
                     }
                     else if (User.IsInRole("Trainer"))
                     {
-                        <a asp-action="ViewSubscribers" asp-route-id="@Model.Id" class="btn btn-warning btn-rounded w-50">View Subscribers</a>
+                        <a asp-action="GetSubcribedUsers" asp-route-id="@Model.Id" class="btn btn-warning btn-rounded w-100">View Subscribers</a>
                     }
                     else if (User?.Identity?.IsAuthenticated == false)
                     {
