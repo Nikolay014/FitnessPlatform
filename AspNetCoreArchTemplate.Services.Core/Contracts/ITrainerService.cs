@@ -23,5 +23,6 @@ namespace FitnessPlatform.Services.Core.Contracts
         Task<EditTrainerVM> GetTrainerForUpdate(int id, bool isAdmin);
         Task UpdateTrainerAsync(EditTrainerVM editTrainerVM, bool isAdmin);
         Task<TrainerClientsVM> GetClientsAsync(int id,string? userid);
+        Task<TrainerEventsVM> GetEventsAsync(int id, string? userId);
     }
 }

@@ -31,7 +31,7 @@
                 <a asp-action="GetTrainerClients" asp-route-id="@Model.TrainerId" class="btn btn-outline-primary">Clients</a>
             </div>
             <div class="text-center mt-3">
-                <a asp-action="AllEvents" class="btn btn-outline-success">Events</a>
+                <a asp-action="GetTrainerEvents" asp-route-id="@Model.TrainerId" class="btn btn-outline-success">Events</a>
             </div>
         }
         else if (User.IsInRole("User"))
@@ -45,7 +45,7 @@
                     <a asp-action="SubscribeToTrainer" asp-route-id="@Model.TrainerId" class="btn btn-outline-primary">Subscribe to Trainer</a>
                 </div>
                 <div class="text-center mt-3">
-                    <a asp-action="AllEvents" class="btn btn-outline-success">Events</a>
+                    <a asp-action="GetTrainerEvents" asp-route-id="@Model.TrainerId" class="btn btn-outline-success">Events</a>
                 </div>
             }
             else
@@ -57,7 +57,7 @@
                     <a asp-action="UnsubscribeToTrainer" asp-route-id="@Model.TrainerId" class="btn btn-outline-primary">Unsubscribe to Trainer</a>
                 </div>
                 <div class="text-center mt-3">
-                    <a asp-action="AllEvents" class="btn btn-outline-success">Events</a>
+                    <a asp-action="GetTrainerEvents" asp-route-id="@Model.TrainerId" class="btn btn-outline-success">Events</a>
                 </div>
             }
         }

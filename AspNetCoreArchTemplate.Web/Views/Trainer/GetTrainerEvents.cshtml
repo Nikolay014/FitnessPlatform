@@ -1,0 +1,43 @@
+﻿@using FitnessPlatform.Web.ViewModels.Trainer
+@model TrainerEventsVM
+
+<link rel="stylesheet" href="~/css/AllGyms.css" asp-append-version="true" />
+
+
+<h2 class="text-center mt-5 mb-4">Events guided by @Model.TrainerName</h2>
+<hr />
+
+<div class="container">
+    <div class="row">
+        @foreach (var eventVM in Model.Events)
+        {
+            <div class="col-md-4 mb-4 d-flex align-items-stretch">
+                <div class="card gym-card w-100">
+                    @if (!string.IsNullOrEmpty(eventVM.Image))
+                    {
+                        <img src="@eventVM.Image" class="card-img-top" style="max-height: 150px; object-fit: cover;" alt="@eventVM.Title">
+                    }
+                    else
+                    {
+                        <img src="~/images/default-image.jpg" class="card-img-top" style="max-height: 150px; object-fit: cover;" alt="No Image Available">
+                    }
+
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@eventVM.Title</h5>
+                        <p class="card-text">Place: @eventVM.Gym </p>
+                        <p class="card-text">Trainer: @eventVM.Trainer </p>
+                        <p class="card-text">Time: @eventVM.StartDate - @eventVM.EndDate</p>
+
+
+
+                        <div class="mt-auto">
+                            <a asp-controller="Event" asp-action="Details" asp-route-id="@eventVM.Id" class="btn btn-info w-100">
+                                <i class="fas fa-info-circle"></i> Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

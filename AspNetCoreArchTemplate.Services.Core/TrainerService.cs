@@ -224,6 +224,60 @@ namespace FitnessPlatform.Services.Core
             return vm;
 
         }
+
+        public async Task<TrainerEventsVM> GetEventsAsync(int id, string? userId)
+        {
+            if (id == 0)
+            {
+
+
+                var trainerid = await dbContext.Trainers
+                    .FirstOrDefaultAsync(t => t.UserId == userId);
+
+
+
+
+                id = trainerid.Id;
+            }
+
+            var trainer = await dbContext.Trainers
+                .Include(t => t.Events)
+                    .ThenInclude(e => e.Gym)
+                .Include(t => t.Events)
+                    .ThenInclude(e => e.Trainer)
+                        .ThenInclude(tr => tr.User)
+                .FirstOrDefaultAsync(t => t.Id == id);
+
+            if (trainer == null)
+            {
+                throw new ArgumentException("Invalid trainer.");
+            }
+
+            var events =  trainer.Events
+                .Select(e => new TrainerEventVM
+                {
+                    Id = e.Id,
+                    Title = e.Title,
+                    Image = e.Image,
+                    TrainerId = e.TrainerId,
+                    Trainer = $"{e.Trainer.User.FirstName} {e.Trainer.User.LastName}",
+                    Gym = e.Gym.Name,
+                    GymId = e.GymId,
+                    StartDate = e.StartDate.ToString("dd/MM/yyyy HH:mm"),
+                    EndDate = e.EndDate.ToString("dd/MM/yyyy HH:mm"),
+
+
+                })
+                .ToList();
+
+            var vm = new TrainerEventsVM
+            {
+                TrainerName = trainer.User.FirstName + " " + trainer.User.LastName,
+                Events = events
+            };
+
+            return vm;
+        }
     }
     
 }
