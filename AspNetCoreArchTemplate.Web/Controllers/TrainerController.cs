@@ -1,10 +1,12 @@
 ﻿using FitnessPlatform.Services.Core;
 using FitnessPlatform.Services.Core.Contracts;
+using FitnessPlatform.Web.ViewModels.Trainer;
 using FitnessPlatform.Web.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
+using System.Security.Claims;
 
 namespace FitnessPlatform.Web.Controllers
 {
@@ -79,6 +81,40 @@ namespace FitnessPlatform.Web.Controllers
 
             await trainerService.UnUserSubscribeToTrainer(id, userId);
             return RedirectToAction("AllTrainers", "Trainer");
+        }
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Update(int id)
+        {
+            bool isAdmin = User.IsInRole("Admin");
+
+            EditTrainerVM editTrainerVM = await trainerService.GetTrainerForUpdate(id, isAdmin);
+            if (editTrainerVM == null)
+            {
+                throw new ArgumentException("Invalid trainer");
+            }
+            return View(editTrainerVM);
+
+        }
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Update(EditTrainerVM editTrainerVM)
+        {
+            bool isAdmin = User.IsInRole("Admin");
+            await trainerService.UpdateTrainerAsync(editTrainerVM,isAdmin);
+
+            return RedirectToAction("AllTrainers", "Trainer");
+        }
+        [Authorize(Roles = "Admin,Trainer")]
+        public async Task<IActionResult> GetTrainerClients(int id)
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+           
+
+           
+            TrainerClientsVM users = await trainerService.GetClientsAsync(id,userId);
+            return View(users);
         }
 
     }

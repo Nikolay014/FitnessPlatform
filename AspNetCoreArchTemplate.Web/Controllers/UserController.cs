@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessPlatform.Web.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class UserController : BaseController
     {
         private readonly IUserService userService;
@@ -30,6 +30,7 @@ namespace FitnessPlatform.Web.Controllers
             return View(users);
         }
         [HttpGet]
+        [Authorize(Roles ="Admin,Trainer")]
 
         public async Task<IActionResult> Details(string Id)
         {
@@ -38,8 +39,8 @@ namespace FitnessPlatform.Web.Controllers
                 return BadRequest("User ID cannot be null or empty.");
             }
 
-            bool isAdmin = User.IsInRole("Admin");
-            var userDetails = await userService.GetUserDetailsAsync(Id, isAdmin);
+            
+            var userDetails = await userService.GetUserDetailsAsync(Id);
             if (userDetails == null)
             {
                 return NotFound("User not found.");

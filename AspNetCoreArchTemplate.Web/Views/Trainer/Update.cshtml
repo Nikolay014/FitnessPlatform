@@ -1,0 +1,42 @@
+﻿@using FitnessPlatform.Web.ViewModels.Trainer
+@model EditTrainerVM
+
+@{
+    ViewData["Title"] = "Make Trainer";
+}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card shadow-lg border-0 p-4" style="width: 100%; max-width: 500px;">
+        <div class="card-body">
+            <h3 class="card-title text-center mb-4">
+                <i class="bi bi-person-plus-fill me-2"></i>Update Trainer
+            </h3>
+
+            <form asp-action="Update" method="post">
+                <input type="hidden" asp-for="TrainerId" />
+
+                <div class="mb-3">
+                    <label asp-for="Image" class="form-label">Trainer Image URL</label>
+                    <input asp-for="Image" class="form-control" placeholder="https://example.com/image.jpg" />
+                    <span asp-validation-for="Image" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="GymId" class="form-label">Select Gym</label>
+                    <select asp-for="GymId" asp-items="@(new SelectList(Model.Gyms, "Id", "Name"))" class="form-select"></select>
+                    <span asp-validation-for="GymId" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="SpecialtyId" class="form-label">Select Specialty</label>
+                    <select asp-for="SpecialtyId" asp-items="@(new SelectList(Model.Specialties, "Id", "Name"))" class="form-select"></select>
+                    <span asp-validation-for="SpecialtyId" class="text-danger small"></span>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100">
+                    <i class="bi bi-check-circle-fill me-1"></i> Update Trainer
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

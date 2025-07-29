@@ -46,31 +46,31 @@ namespace FitnessPlatform.Web.Controllers
                 return View(createEventVM);
             }
 
-            // Парсваме датата и часа от string към DateTime
-            if (!DateTime.TryParse($"{createEventVM.StartDate} {createEventVM.StartTime}", out var startDateTime))
-            {
-                ModelState.AddModelError(string.Empty, "Invalid start date or time.");
-                return View(createEventVM);
-            }
+            //// Парсваме датата и часа от string към DateTime
+            //if (!DateTime.TryParse($"{createEventVM.StartDate} {createEventVM.StartTime}", out var startDateTime))
+            //{
+            //    ModelState.AddModelError(string.Empty, "Invalid start date or time.");
+            //    return View(createEventVM);
+            //}
 
-            if (startDateTime < DateTime.Now)
-            {
-                ModelState.AddModelError(string.Empty, "Start time must be in the future.");
-                return View(createEventVM);
-            }
+            //if (startDateTime < DateTime.Now)
+            //{
+            //    ModelState.AddModelError(string.Empty, "Start time must be in the future.");
+            //    return View(createEventVM);
+            //}
 
-            // Същото може да се направи и за EndDate + EndTime, ако искаш:
-            if (!DateTime.TryParse($"{createEventVM.EndDate} {createEventVM.EndTime}", out var endDateTime))
-            {
-                ModelState.AddModelError(string.Empty, "Invalid end date or time.");
-                return View(createEventVM);
-            }
+            //// Същото може да се направи и за EndDate + EndTime, ако искаш:
+            //if (!DateTime.TryParse($"{createEventVM.EndDate} {createEventVM.EndTime}", out var endDateTime))
+            //{
+            //    ModelState.AddModelError(string.Empty, "Invalid end date or time.");
+            //    return View(createEventVM);
+            //}
 
-            if (endDateTime <= startDateTime)
-            {
-                ModelState.AddModelError(string.Empty, "End time must be after start time.");
-                return View(createEventVM);
-            }
+            //if (endDateTime <= startDateTime)
+            //{
+            //    ModelState.AddModelError(string.Empty, "End time must be after start time.");
+            //    return View(createEventVM);
+            //}
 
             await eventService.CreateEventAsync(createEventVM);
 

@@ -46,7 +46,7 @@ namespace FitnessPlatform.Services.Core
         public async Task<IEnumerable<EventVM>> GetEventAsync(string? userId)
         {
             var eventVM = await dbContext.Events
-                .Where(e=>e.StartDate < DateTime.UtcNow)
+                .Where(e=>e.StartDate > DateTime.Now)
                .Select(e => new EventVM
                {
                    Id = e.Id,

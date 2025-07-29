@@ -1,6 +1,7 @@
 ﻿using AspNetCoreArchTemplate.Data;
 using FitnessPlatform.Data.Models;
 using FitnessPlatform.Services.Core.Contracts;
+using FitnessPlatform.Web.ViewModels.Gym;
 using FitnessPlatform.Web.ViewModels.Trainer;
 using FitnessPlatform.Web.ViewModels.User;
 using Microsoft.AspNetCore.Identity;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -71,6 +73,8 @@ namespace FitnessPlatform.Services.Core
 
         }
 
+       
+
         public async Task RemoveTrainer(int trainersId, bool isAdmin)
         {
            var trainer = await dbContext.Trainers.Include(t => t.User).FirstOrDefaultAsync(t => t.Id == trainersId);
@@ -132,7 +136,94 @@ namespace FitnessPlatform.Services.Core
             dbContext.TrainerClients.Add(trainerClient);
             await dbContext.SaveChangesAsync();
         }
+        public async Task<EditTrainerVM> GetTrainerForUpdate(int id, bool isAdmin)
+        {
+            if (!isAdmin)
+            {
+                throw new ArgumentException("Admin not found.");
+            }
+            Trainer trainer = await dbContext.Trainers.FirstOrDefaultAsync(t => t.Id == id);
 
+            if (trainer == null)
+            {
+                throw new ArgumentException("Invalid trainer.");
+            }
+            EditTrainerVM editTrainerVM = new EditTrainerVM 
+            {
+                TrainerId = id,
+                GymId = trainer.GymId,
+                SpecialtyId = trainer.SpecialtyId,
+                Image = trainer.TrainerImage,
+                Gyms = dbContext.Gym.ToList(),
+                Specialties = dbContext.Specialties.ToList(),
+
+            };
+            return editTrainerVM;
+
+
+        }
+
+        public async Task UpdateTrainerAsync(EditTrainerVM editTrainerVM, bool isAdmin)
+        {
+            if (!isAdmin)
+            {
+                throw new ArgumentException("Admin not found.");
+            }
+            Trainer trainer = await dbContext.Trainers.FirstOrDefaultAsync(t=>t.Id == editTrainerVM.TrainerId);
+
+            trainer.TrainerImage = editTrainerVM.Image;
+            trainer.GymId = editTrainerVM.GymId;
+            trainer.SpecialtyId = editTrainerVM.SpecialtyId;
+
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<TrainerClientsVM> GetClientsAsync(int id, string? userid)
+        {
+            if (id == 0)
+            {
+                
+
+                var trainerid = await dbContext.Trainers
+                    .FirstOrDefaultAsync(t => t.UserId == userid);
+
+               
+
+                
+                id = trainerid.Id;
+            }
+
+            Trainer trainer = await dbContext.Trainers.Include(t=>t.User).FirstOrDefaultAsync(t => t.Id == id);
+
+            if (trainer == null)
+            {
+                throw new ArgumentException("Invalid trainer.");
+            }
+
+            var users = await dbContext.TrainerClients
+                .Where(t => t.TrainerId == id)
+                .Include(t=>t.Client)
+                .Select(s => new TrainerClientVM
+                {
+                    Id = s.ClientId,
+                    FullName = s.Client.FirstName + " " + s.Client.LastName,
+                    Image = s.Client.ImageUrl,
+                    PhoneNumber = s.Client.PhoneNumber,
+                    Gender = s.Client.Gender,
+                   
+
+                })
+                .ToListAsync();
+
+            var vm = new TrainerClientsVM
+            {
+                TrainerName = trainer.User.FirstName + " " + trainer.User.LastName,
+                Clients = users
+            };
+
+            return vm;
+
+        }
     }
     
 }

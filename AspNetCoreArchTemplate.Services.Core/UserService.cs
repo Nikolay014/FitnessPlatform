@@ -40,12 +40,9 @@ namespace FitnessPlatform.Services.Core
             
         }
 
-        public async Task<UserDetailsVM> GetUserDetailsAsync(string userId, bool isAdmin)
+        public async Task<UserDetailsVM> GetUserDetailsAsync(string userId)
         {
-            if(!isAdmin || string.IsNullOrEmpty(userId))
-            {
-                return null; // If not admin and no userId provided, return null
-            }
+            
             var user = await userManager.FindByIdAsync(userId);
 
             

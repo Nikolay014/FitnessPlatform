@@ -20,7 +20,8 @@ namespace FitnessPlatform.Services.Core.Contracts
         Task UserSubscribeToTrainer(int trainerId, string userId);
 
         Task UnUserSubscribeToTrainer(int trainerId, string userId);
-
-
+        Task<EditTrainerVM> GetTrainerForUpdate(int id, bool isAdmin);
+        Task UpdateTrainerAsync(EditTrainerVM editTrainerVM, bool isAdmin);
+        Task<TrainerClientsVM> GetClientsAsync(int id,string? userid);
     }
 }
