@@ -1,0 +1,74 @@
+﻿@model FitnessPlatform.Web.ViewModels.DailyLog.DailyLogVM
+@{
+    ViewData["Title"] = "My Daily Log";
+}
+
+<h2 class="text-center mb-4 mt-5">My Daily Log - @Model.Date.ToString("dd MMMM yyyy", System.Globalization.CultureInfo.GetCultureInfo("bg-BG"))</h2>
+
+<div class="row mb-5">
+    <div class="col-md-6">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h4>🍽️ Meals</h4>
+            <a asp-controller="Food" asp-action="Add" class="btn btn-sm btn-success">➕ Add Meal</a>
+        </div>
+
+        @if (Model.Foods.Any())
+        {
+            <ul class="list-group">
+                @foreach (var meal in Model.Foods)
+                {
+                    <li class="list-group-item">
+                        <strong>@meal.Description</strong> - @meal.Calories calories
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No meals recorded for this day.</p>
+        }
+    </div>
+
+    <div class="col-md-6">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h4>🏋️ Workouts</h4>
+            <a asp-controller="Workout" asp-action="Add" class="btn btn-sm btn-primary">➕ Add Workout</a>
+        </div>
+
+        @if (Model.Workouts.Any())
+        {
+            <ul class="list-group">
+                @foreach (var workout in Model.Workouts)
+                {
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Workout Notes</h5>
+                            <p class="card-text">@workout.Notes</p>
+                            <ul class="list-group">
+                                @foreach (var entry in workout.Entries)
+                                {
+                                    <li class="list-group-item">
+                                        <strong>@entry.Exercise</strong> –
+                                        @entry.Sets sets × @entry.Repetitions reps
+                                        @if (entry.WeightKg > 0)
+                                        {
+                                            <span> | @entry.WeightKg kg</span>
+                                        }
+                                        @if (entry.DistanceKm > 0)
+                                        {
+                                            <span> | @entry.DistanceKm km</span>
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No workouts recorded for this day.</p>
+        }
+    </div>
+</div>
