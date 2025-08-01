@@ -29,6 +29,7 @@ namespace AspNetCoreArchTemplate.Web
             builder.Services.AddScoped<ITrainerService, TrainerService>();
             builder.Services.AddScoped<IEventService, EventService>();
             builder.Services.AddScoped<IDailyLogService, DailyLogService>();
+            builder.Services.AddScoped<IWorkoutService, WorkoutService>();
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services
                 .AddDefaultIdentity<ApplicationUser>(options =>

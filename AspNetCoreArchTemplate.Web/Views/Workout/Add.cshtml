@@ -1,0 +1,41 @@
+﻿@model FitnessPlatform.Web.ViewModels.Workout.WorkoutSessionVM
+
+<h2 class="text-center">Add Workout Session</h2>
+
+<form asp-action="Add" method="post" class="w-75 mx-auto mt-4">
+    <div id="entries-container">
+        @for (int i = 0; i < Model.Entries.Count; i++)
+        {
+            <div class="entry-form border p-3 mb-3">
+                <h5>Exercise @(i + 1)</h5>
+
+                <div class="form-group">
+                    <label asp-for="Entries[i].Exercise"></label>
+                    <input asp-for="Entries[i].Exercise" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Entries[i].Repetitions"></label>
+                    <input asp-for="Entries[i].Repetitions" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Entries[i].Sets"></label>
+                    <input asp-for="Entries[i].Sets" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Entries[i].DistanceKm"></label>
+                    <input asp-for="Entries[i].DistanceKm" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Entries[i].WeightKg"></label>
+                    <input asp-for="Entries[i].WeightKg" class="form-control" />
+                </div>
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">💾 Save All Exercises</button>
+</form>
