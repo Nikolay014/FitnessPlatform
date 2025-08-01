@@ -20,13 +20,17 @@ namespace FitnessPlatform.Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> MyLog(DateTime? date = null)
+        public async Task<IActionResult> MyLog(DateTime? date,string id)
         {
-            string userId = GetUserId(); // текущият потребител
+            if (String.IsNullOrEmpty(id))
+            {
+                id = GetUserId();
+            }
+             // текущият потребител
 
             var logDate = date ?? DateTime.Today;
 
-            var vm = await dailyLogService.GetUserLogAsync(userId, logDate);
+            var vm = await dailyLogService.GetUserLogAsync(id, logDate);
             return View(vm); ;
         }
     }

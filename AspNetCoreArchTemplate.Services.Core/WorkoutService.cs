@@ -54,5 +54,30 @@ namespace FitnessPlatform.Services.Core
             dbContext.WorkoutSessions.Add(session);
             await dbContext.SaveChangesAsync();
         }
+
+        public async Task DeleteWorkoutEntryAsync(int id, string currentUserId)
+        {
+            var entry = await dbContext.WorkoutEntries
+                .Include(w=>w.WorkoutSession)
+                .ThenInclude(w=>w.DailyLog)
+                .FirstOrDefaultAsync(w=>w.Id == id);
+            if (entry != null && entry.WorkoutSession.DailyLog.UserId == currentUserId)
+            {
+                dbContext.WorkoutEntries.Remove(entry);
+
+                // Ако искаш да премахнеш и WorkoutSession, когато няма останали entries:
+                var session = await dbContext.WorkoutSessions
+                    .Include(s => s.Entries)
+                    .FirstOrDefaultAsync(s => s.Id == entry.WorkoutSessionId);
+
+                await dbContext.SaveChangesAsync();
+
+                if (session != null && !session.Entries.Any())
+                {
+                    dbContext.WorkoutSessions.Remove(session);
+                    await dbContext.SaveChangesAsync();
+                }
+            }
+        }
     }
 }

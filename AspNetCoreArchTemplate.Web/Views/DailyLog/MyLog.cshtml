@@ -3,72 +3,112 @@
     ViewData["Title"] = "My Daily Log";
 }
 
-<h2 class="text-center mb-4 mt-5">My Daily Log - @Model.Date.ToString("dd MMMM yyyy", System.Globalization.CultureInfo.GetCultureInfo("bg-BG"))</h2>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">My Daily Log - @Model.Date.ToString("dd MMMM yyyy")</h2>
 
-<div class="row mb-5">
-    <div class="col-md-6">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-            <h4>🍽️ Meals</h4>
-            <a asp-controller="Food" asp-action="Add" class="btn btn-sm btn-success">➕ Add Meal</a>
-        </div>
-
-        @if (Model.Foods.Any())
-        {
-            <ul class="list-group">
-                @foreach (var meal in Model.Foods)
-                {
-                    <li class="list-group-item">
-                        <strong>@meal.Description</strong> - @meal.Calories calories
-                    </li>
-                }
-            </ul>
-        }
-        else
-        {
-            <p>No meals recorded for this day.</p>
-        }
+        <form asp-controller="DailyLog" asp-action="MyLog" method="get" class="d-flex align-items-center">
+            <input type="date" name="date" class="form-control me-2" value="@Model.Date.ToString("yyyy-MM-dd")" />
+            <button type="submit" class="btn btn-outline-secondary">View</button>
+        </form>
+        <form asp-controller="DailyLog" asp-action="MyLog" method="get">
+            <button type="submit" class="btn btn-outline-primary">Today</button>
+        </form>
     </div>
 
-    <div class="col-md-6">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-            <h4>🏋️ Workouts</h4>
-            <a asp-controller="Workout" asp-action="Add" class="btn btn-sm btn-primary">➕ Add Workout</a>
+    <div class="row">
+        <!-- Meals Section -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center bg-light">
+                    <h5 class="mb-0">🍽️ Meals</h5>
+                    @if (User?.Identity?.IsAuthenticated == true && User.IsInRole("User"))
+                    {
+                        <a asp-controller="Food" asp-action="Add" class="btn btn-success btn-sm">+ Add Meal</a>
+                    }
+                    
+                </div>
+                <ul class="list-group list-group-flush">
+                    @if (Model.Foods.Any())
+                    {
+                        @foreach (var meal in Model.Foods)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>@meal.Description</strong> – @meal.Calories calories
+                                </div>
+                                @if (User?.Identity?.IsAuthenticated == true && User.IsInRole("User"))
+                                {
+                                    <form asp-controller="Food" asp-action="Delete" asp-route-id="@meal.Id" method="post" class="mb-0">
+                                        <button type="submit" class="btn btn-sm btn-danger">🗑 Delete</button>
+                                    </form>
+                                }
+                               
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="list-group-item text-muted">No meals recorded for this day.</li>
+                    }
+                </ul>
+            </div>
         </div>
 
-        @if (Model.Workouts.Any())
-        {
-            <ul class="list-group">
-                @foreach (var workout in Model.Workouts)
-                {
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">Workout Notes</h5>
-                            <p class="card-text">@workout.Notes</p>
-                            <ul class="list-group">
+        <!-- Workouts Section -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center bg-light">
+                    <h5 class="mb-0">🏋️ Workouts</h5>
+                    @if (User?.Identity?.IsAuthenticated == true && User.IsInRole("User"))
+                    {
+                        <a asp-controller="Workout" asp-action="Add" class="btn btn-primary btn-sm">+ Add Workout</a>
+                        
+                    }
+                    
+                </div>
+                <div class="card-body">
+                    @if (Model.Workouts.Any())
+                    {
+                        @foreach (var workout in Model.Workouts)
+                        {
+                            <div class="mb-3 border rounded p-3 bg-light">
                                 @foreach (var entry in workout.Entries)
                                 {
-                                    <li class="list-group-item">
-                                        <strong>@entry.Exercise</strong> –
-                                        @entry.Sets sets × @entry.Repetitions reps
-                                        @if (entry.WeightKg > 0)
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div>
+                                            <strong>@entry.Exercise</strong><br />
+                                            @if (entry.Sets != null && entry.Repetitions != null)
+                                            {
+                                                <small>@entry.Sets sets × @entry.Repetitions reps</small>
+                                            }
+                                            @if (entry.WeightKg != null)
+                                            {
+                                                <small> | @entry.WeightKg kg</small>
+                                            }
+                                            @if (entry.DistanceKm != null)
+                                            {
+                                                <small> | @entry.DistanceKm km</small>
+                                            }
+                                        </div>
+                                        @if (User?.Identity?.IsAuthenticated == true && User.IsInRole("User"))
                                         {
-                                            <span> | @entry.WeightKg kg</span>
+                                            <form asp-controller="Workout" asp-action="DeleteEntry" asp-route-id="@entry.Id" method="post" class="mb-0">
+                                                <button type="submit" class="btn btn-sm btn-danger">🗑 Delete</button>
+                                            </form>
                                         }
-                                        @if (entry.DistanceKm > 0)
-                                        {
-                                            <span> | @entry.DistanceKm km</span>
-                                        }
-                                    </li>
+                                        
+                                    </div>
                                 }
-                            </ul>
-                        </div>
-                    </div>
-                }
-            </ul>
-        }
-        else
-        {
-            <p>No workouts recorded for this day.</p>
-        }
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted">No workouts recorded for this day.</p>
+                    }
+                </div>
+            </div>
+        </div>
     </div>
 </div>

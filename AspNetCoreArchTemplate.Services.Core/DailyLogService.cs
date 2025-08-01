@@ -49,6 +49,7 @@ namespace FitnessPlatform.Services.Core
                 Date = date,
                 Foods = log.Foods.Select(f => new FoodVM
                 {
+                    Id = f.Id,
                     Image = f.Image,
                     Description = f.Description,
                     Calories = f.Calories
@@ -58,6 +59,7 @@ namespace FitnessPlatform.Services.Core
                     Notes = ws.Notes,
                     Entries = ws.Entries.Select(e => new WorkoutEntryVM
                     {
+                        Id = e.Id,
                         Exercise = e.Exercise,
                         Repetitions = e.Repetitions,
                         Sets = e.Sets,

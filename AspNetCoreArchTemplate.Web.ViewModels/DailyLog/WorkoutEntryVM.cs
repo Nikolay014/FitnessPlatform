@@ -8,6 +8,7 @@ namespace FitnessPlatform.Web.ViewModels.DailyLog
 {
     public class WorkoutEntryVM
     {
+        public int Id { get; set; }
         public string Exercise { get; set; }
         public int? Repetitions { get; set; }
         public int? Sets { get; set; }

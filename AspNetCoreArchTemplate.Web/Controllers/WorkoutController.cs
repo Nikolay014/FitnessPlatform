@@ -1,10 +1,12 @@
 ﻿using FitnessPlatform.Services.Core.Contracts;
 using FitnessPlatform.Web.ViewModels.Workout;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace FitnessPlatform.Web.Controllers
 {
+    [Authorize(Roles ="User")]
     public class WorkoutController : BaseController
     {
         private readonly IWorkoutService workoutService;
@@ -38,9 +40,17 @@ namespace FitnessPlatform.Web.Controllers
                 return View(model);
             }
 
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            string userId = GetUserId();
             await workoutService.AddWorkoutSessionAsync(userId, model);
 
+            return RedirectToAction("MyLog", "DailyLog");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteEntry(int id)
+        {
+            string currUserId = GetUserId();    
+            await workoutService.DeleteWorkoutEntryAsync(id,currUserId);
             return RedirectToAction("MyLog", "DailyLog");
         }
     }

@@ -10,5 +10,6 @@ namespace FitnessPlatform.Services.Core.Contracts
     public interface IWorkoutService
     {
         Task AddWorkoutSessionAsync(string userId, WorkoutSessionVM model);
+        Task DeleteWorkoutEntryAsync(int id,string currentUserId);
     }
 }
