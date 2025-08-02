@@ -25,19 +25,39 @@ namespace FitnessPlatform.Services.Core
 
         
 
-        public async Task<IEnumerable<UserVM>>GetAllUsersAsync(bool isAdmin)
+        public async Task<PaginatedUserVM>GetAllUsersAsync(int page, bool isAdmin)
         {
-            var usersInRole = await userManager.GetUsersInRoleAsync("User");
-            return usersInRole.Select(u => new UserVM
-            {
-                Id = u.Id,
-                FullName = $"{u.FirstName} {u.LastName}",
-                Gender = u.Gender,
-                PhoneNumber = u.PhoneNumber,
-                Image = u.ImageUrl,
-            });
+            const int PageSize = 2; 
 
-            
+            var usersInRole = await userManager.GetUsersInRoleAsync("User");
+
+            var userVMs = usersInRole
+                .Select(u => new UserVM
+                {
+                    Id = u.Id,
+                    FullName = $"{u.FirstName} {u.LastName}",
+                    Gender = u.Gender,
+                    PhoneNumber = u.PhoneNumber,
+                    Image = u.ImageUrl,
+                })
+                .ToList();
+
+            var totalUsers = userVMs.Count;
+            var totalPages = (int)Math.Ceiling(totalUsers / (double)PageSize);
+
+            var usersForCurrentPage = userVMs
+                .Skip((page - 1) * PageSize)
+                .Take(PageSize)
+                .ToList();
+
+            return new PaginatedUserVM
+            {
+                Users = usersForCurrentPage,
+                CurrentPage = page,
+                TotalPages = totalPages
+            };
+
+
         }
 
         public async Task<UserDetailsVM> GetUserDetailsAsync(string userId)

@@ -18,6 +18,6 @@ namespace FitnessPlatform.Web.ViewModels.Trainer
 
         public IEnumerable<TrainerVM> Trainers { get; set; } = new List<TrainerVM>();
         public int CurrentPage { get; set; }
-        public int TotalPages { get; set; }// за филтриране по име на зала
+        public int TotalPages { get; set; }
     }
 }

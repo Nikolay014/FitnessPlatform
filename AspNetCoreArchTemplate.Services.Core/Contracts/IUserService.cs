@@ -10,7 +10,7 @@ namespace FitnessPlatform.Services.Core.Contracts
 {
     public interface IUserService
     {
-        Task<IEnumerable<UserVM>> GetAllUsersAsync(bool isAdmin);
+        Task<PaginatedUserVM> GetAllUsersAsync(int page, bool isAdmin);
         Task<UserDetailsVM> GetUserDetailsAsync(string userId);
 
         Task<CreateTrainerUserVM> GetUserForTrainerAsync(string userId, bool isAdmin);

@@ -19,14 +19,14 @@ namespace FitnessPlatform.Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> AllUsers()
+        public async Task<IActionResult> AllUsers(int page =1)
         {
             // Check if the user is an admin
 
 
 
             bool isAdmin = User.IsInRole("Admin");
-            var users = await userService.GetAllUsersAsync(isAdmin);
+            var users = await userService.GetAllUsersAsync(page,isAdmin);
             return View(users);
         }
         [HttpGet]
