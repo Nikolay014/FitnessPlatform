@@ -79,23 +79,40 @@ namespace FitnessPlatform.Services.Core
             return gymDetails;
         }
 
-        public async Task<IEnumerable<GymVM>> GetGymsAsync(string? userId)
+        public async Task<PaginatedGymsVM> GetGymsAsync(string? userId, string? location = null, int page = 1, int pageSize = 3)
         {
-            var gyms = await dbContext.Gym
-                .Select(g => new GymVM
-                {
-                    Id = g.Id,
-                    Name = g.Name,
-                    Location = g.Location,
-                    PrimaryImage = g.Images.Where(i=>i.IsPrimary)
-                        .Select(i => i.ImageUrl)
-                        .FirstOrDefault()
-                        
-                   
-                })
+            var query = dbContext.Gym
+         .Select(g => new GymVM
+         {
+             Id = g.Id,
+             Name = g.Name,
+             Location = g.Location,
+             PrimaryImage = g.Images
+                 .Where(i => i.IsPrimary)
+                 .Select(i => i.ImageUrl)
+                 .FirstOrDefault()
+         });
+
+            if (!string.IsNullOrEmpty(location))
+            {
+                query = query.Where(g => g.Location.ToLower().Contains(location.ToLower()));
+            }
+
+            int totalGyms = await query.CountAsync();
+
+            var gyms = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
 
-            return gyms;
+            return new PaginatedGymsVM
+            {
+                Gyms = gyms,
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling(totalGyms / (double)pageSize),
+                Location = location
+            };
+        
         }
         
 

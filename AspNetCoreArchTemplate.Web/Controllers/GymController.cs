@@ -20,10 +20,10 @@ namespace FitnessPlatform.Web.Controllers
 
         [AllowAnonymous]
 
-        public async Task<IActionResult> AllGyms()
+        public async Task<IActionResult> AllGyms(string? location, int page = 1)
         {
             string? userId = GetUserId();
-            IEnumerable<GymVM> gyms = await gymService.GetGymsAsync(userId);
+            PaginatedGymsVM gyms = await gymService.GetGymsAsync(userId,location,page);
             return View(gyms);
 
         }

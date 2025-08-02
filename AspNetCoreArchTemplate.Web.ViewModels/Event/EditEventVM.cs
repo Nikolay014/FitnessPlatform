@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FitnessPlatform.Web.ViewModels.Event
 {
-    public class EditEventVM
+    public class EditEventVM:IValidatableObject
     {
         public int Id { get; set; }
         [Required, MaxLength(200)]
@@ -34,5 +34,40 @@ namespace FitnessPlatform.Web.ViewModels.Event
         public List<FitnessPlatform.Data.Models.Gym> Gyms { get; set; } = new List<FitnessPlatform.Data.Models.Gym>();
 
         public List<TrainerDropdownVM> TrainersDropdown { get; set; } = new List<TrainerDropdownVM>();
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            DateTime startDateTime, endDateTime;
+
+            bool isStartParsed = DateTime.TryParse($"{StartDate} {StartTime}", out startDateTime);
+            bool isEndParsed = DateTime.TryParse($"{EndDate} {EndTime}", out endDateTime);
+
+            if (isStartParsed && isEndParsed)
+            {
+                if (endDateTime <= startDateTime)
+                {
+                    yield return new ValidationResult(
+                        "End date and time must be after start date and time.",
+                        new[] { nameof(EndDate), nameof(EndTime) }
+                    );
+                }
+            }
+            else
+            {
+                if (!isStartParsed)
+                {
+                    yield return new ValidationResult("Invalid start date/time format.");
+                }
+
+                if (!isEndParsed)
+                {
+                    yield return new ValidationResult("Invalid end date/time format.");
+                }
+            }
+        }
+
+
     }
+
+    
 }

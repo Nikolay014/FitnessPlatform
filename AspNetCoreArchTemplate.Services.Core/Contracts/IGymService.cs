@@ -10,7 +10,7 @@ namespace FitnessPlatform.Services.Core.Contracts
 {
     public interface IGymService
     {
-        Task<IEnumerable<GymVM>> GetGymsAsync(string? userId);
+        Task<PaginatedGymsVM> GetGymsAsync(string? userId,string? location, int page = 1, int pageSize = 3);
 
         Task CreateGymAsync(CreateGymVM model);
 
