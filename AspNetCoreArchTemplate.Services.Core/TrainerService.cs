@@ -1,10 +1,12 @@
 ﻿using AspNetCoreArchTemplate.Data;
+using Azure;
 using FitnessPlatform.Data.Models;
 using FitnessPlatform.Services.Core.Contracts;
 using FitnessPlatform.Web.ViewModels.Gym;
 using FitnessPlatform.Web.ViewModels.Trainer;
 using FitnessPlatform.Web.ViewModels.User;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace FitnessPlatform.Services.Core
 {
@@ -25,23 +28,43 @@ namespace FitnessPlatform.Services.Core
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
-        public async Task<IEnumerable<TrainerVM>> GetAllTrainersAsync(bool isAdmin)
+        public async Task<PaginatedTrainersVM> GetAllTrainersAsync(int? gymId, int? specialtyId, int page, bool isAdmin)
         {
-            var trainers = await dbContext.Trainers
+            const int PageSize = 3;
+            var trainersQuery = dbContext.Trainers
                 .Include(t => t.User)
                 .Include(t => t.Gym)
                 .Include(t => t.Specialty)
+                .AsQueryable();
+
+            if (gymId.HasValue)
+                trainersQuery = trainersQuery.Where(t => t.GymId == gymId.Value);
+
+            if (specialtyId.HasValue)
+                trainersQuery = trainersQuery.Where(t => t.SpecialtyId == specialtyId.Value);
+
+            var totalTrainers = await trainersQuery.CountAsync();
+
+            var trainers = await trainersQuery
+                .Skip((page - 1) * PageSize)
+                .Take(PageSize)
+                .Select(t => new TrainerVM
+                {
+                    TrainerId = t.Id,
+                    Gym = t.Gym.Name,
+                    FullName = $"{t.User.FirstName} {t.User.LastName}",
+                    Image = t.TrainerImage,
+                    Specialty = t.Specialty.Name,
+                    PhoneNumber = t.User.PhoneNumber
+                })
                 .ToListAsync();
-            IEnumerable<TrainerVM> trainer = trainers.Select(u => new TrainerVM
+
+            return new PaginatedTrainersVM
             {
-                TrainerId = u.Id,
-                Gym = u.Gym.Name,
-                FullName = $"{u.User.FirstName} {u.User.LastName}",
-                Image = u.TrainerImage,
-                Specialty = u.Specialty.Name,
-                PhoneNumber = u.User.PhoneNumber
-            });
-            return trainer;
+                Trainers = trainers,
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling((double)totalTrainers / PageSize)
+            };
         }
 
         public async Task<TrainerDetailsVM> GetTrainerDetailsAsync(int trainerId,string userId, bool isAdmin)
@@ -277,6 +300,20 @@ namespace FitnessPlatform.Services.Core
             };
 
             return vm;
+
+        }
+        public async Task<IEnumerable<SelectListItem>> GetAllGymsForDropdownAsync()
+        {
+            return await dbContext.Gym
+                .Select(g => new SelectListItem { Value = g.Id.ToString(), Text = g.Name })
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetAllSpecialtiesForDropdownAsync()
+        {
+            return await dbContext.Specialties
+                .Select(s => new SelectListItem { Value = s.Id.ToString(), Text = s.Name })
+                .ToListAsync();
         }
     }
     

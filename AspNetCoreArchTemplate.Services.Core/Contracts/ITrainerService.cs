@@ -1,5 +1,6 @@
 ﻿using FitnessPlatform.Web.ViewModels.Trainer;
 using FitnessPlatform.Web.ViewModels.User;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace FitnessPlatform.Services.Core.Contracts
     public interface ITrainerService
     {
 
-        Task<IEnumerable<TrainerVM>> GetAllTrainersAsync(bool isAdmin);
+        Task<PaginatedTrainersVM> GetAllTrainersAsync(int? gymId, int? specialtyId, int page, bool isAdmin);
 
         Task<TrainerDetailsVM> GetTrainerDetailsAsync(int trainerId,string userId, bool isAdmin);
 
@@ -24,5 +25,8 @@ namespace FitnessPlatform.Services.Core.Contracts
         Task UpdateTrainerAsync(EditTrainerVM editTrainerVM, bool isAdmin);
         Task<TrainerClientsVM> GetClientsAsync(int id,string? userid);
         Task<TrainerEventsVM> GetEventsAsync(int id, string? userId);
+
+        Task<IEnumerable<SelectListItem>> GetAllGymsForDropdownAsync();
+        Task<IEnumerable<SelectListItem>> GetAllSpecialtiesForDropdownAsync();
     }
 }

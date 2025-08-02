@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AspNetCoreArchTemplate.Data.Models\FitnessPlatform.Data.Models.csproj" />
     <ProjectReference Include="..\AspNetCoreArchTemplate.GCommon\FitnessPlatform.GCommon.csproj" />
     <ProjectReference Include="..\AspNetCoreArchTemplate.Services.AutoMapping\FitnessPlatform.Services.AutoMapping.csproj" />

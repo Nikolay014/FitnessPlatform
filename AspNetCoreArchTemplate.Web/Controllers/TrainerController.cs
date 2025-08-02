@@ -25,15 +25,25 @@ namespace FitnessPlatform.Web.Controllers
 
         [HttpGet]
 
-        public async Task<IActionResult> AllTrainers()
+        public async Task<IActionResult> AllTrainers(int? gymId, int? specialtyId, int page = 1)
         {
-            // Check if the user is an admin
-
-
-
             bool isAdmin = User.IsInRole("Admin");
-            var trainers = await trainerService.GetAllTrainersAsync(isAdmin);
-            return View(trainers);
+            var trainers = await trainerService.GetAllTrainersAsync(gymId, specialtyId, page, isAdmin);
+            var gyms = await trainerService.GetAllGymsForDropdownAsync();
+            var specialties = await trainerService.GetAllSpecialtiesForDropdownAsync();
+
+            var viewModel = new PaginatedTrainersVM
+            {
+                Trainers = trainers.Trainers,
+                CurrentPage = trainers.CurrentPage,
+                TotalPages = trainers.TotalPages,
+                Gyms = gyms,
+                Specialties = specialties,
+                SelectedGymId = gymId,
+                SelectedSpecialtyId = specialtyId
+            };
+
+            return View(viewModel);
         }
 
         public async Task<IActionResult> Details(int Id)
