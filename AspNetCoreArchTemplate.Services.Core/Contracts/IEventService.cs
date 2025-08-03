@@ -11,7 +11,7 @@ namespace FitnessPlatform.Services.Core.Contracts
 {
     public interface IEventService
     {
-        Task<IEnumerable<EventVM>> GetEventAsync(string? userId);
+        Task<PaginatedEventsVM> GetEventAsync(int? gymId, int page,string? userId);
 
         Task CreateEventAsync(CreateEventVM model);
 

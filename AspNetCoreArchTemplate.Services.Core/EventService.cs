@@ -6,6 +6,7 @@ using FitnessPlatform.Web.ViewModels.Gym;
 using FitnessPlatform.Web.ViewModels.User;
 using FitnessPlatform.Web.Views.Event;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -43,28 +44,53 @@ namespace FitnessPlatform.Services.Core
 
         
 
-        public async Task<IEnumerable<EventVM>> GetEventAsync(string? userId)
+        public async Task<PaginatedEventsVM> GetEventAsync(int? gymId, int page,string? userId)
         {
-            var eventVM = await dbContext.Events
-                .Where(e=>e.StartDate > DateTime.Now)
-               .Select(e => new EventVM
-               {
-                   Id = e.Id,
-                   Title = e.Title,
-                   Image = e.Image,
-                   TrainerId = e.TrainerId,
-                   Trainer = $"{e.Trainer.User.FirstName} {e.Trainer.User.LastName}",
-                   Gym = e.Gym.Name,
-                   GymId = e.GymId,
-                   StartDate = e.StartDate.ToString("dd/MM/yyyy HH:mm"),
-                   EndDate = e.EndDate.ToString("dd/MM/yyyy HH:mm"),
+            const int PageSize = 2;
+            var eventsQuery = dbContext.Events
+                .Where(e => e.StartDate > DateTime.Now)
+        .Include(e => e.Gym)
+        .AsQueryable();
 
+            if (gymId.HasValue)
+            {
+                eventsQuery = eventsQuery.Where(e => e.GymId == gymId);
+            }
 
+            int totalEvents = await eventsQuery.CountAsync();
 
-               })
-               .ToListAsync();
+            var events = await eventsQuery
+                .Skip((page - 1) * PageSize)
+                .Take(PageSize)
+                .Select(e => new EventVM
+                {
+                    Id = e.Id,
+                    Title = e.Title,
+                    Image = e.Image,
+                    TrainerId = e.TrainerId,
+                    Trainer = $"{e.Trainer.User.FirstName} {e.Trainer.User.LastName}",
+                    Gym = e.Gym.Name,
+                    GymId = e.GymId,
+                    StartDate = e.StartDate.ToString("dd/MM/yyyy HH:mm"),
+                    EndDate = e.EndDate.ToString("dd/MM/yyyy HH:mm"),
+                })
+                .ToListAsync();
 
-            return eventVM;
+            var gyms = await dbContext.Gym
+                .Select(g => new SelectListItem
+                {
+                    Text = g.Name,
+                    Value = g.Id.ToString()
+                }).ToListAsync();
+
+            return new PaginatedEventsVM
+            {
+                Events = events,
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling((double)totalEvents / PageSize),
+                SelectedGymId = gymId,
+                Gyms = gyms
+            };
         }
 
         public async Task<EventDetailsVM> GetEventDetailsAsync(int eventId, string userId,bool isAdmin)

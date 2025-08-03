@@ -23,10 +23,10 @@ namespace FitnessPlatform.Web.Controllers
 
         [AllowAnonymous]
 
-        public async Task<IActionResult> AllEvents()
+        public async Task<IActionResult> AllEvents(int? gymId, int page = 1)
         {
             string? userId = GetUserId();
-            IEnumerable<EventVM> events = await eventService.GetEventAsync(userId);
+            PaginatedEventsVM events = await eventService.GetEventAsync(gymId,page, userId);
             return View(events);
 
         }

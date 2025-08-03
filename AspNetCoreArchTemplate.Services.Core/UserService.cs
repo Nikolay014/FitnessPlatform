@@ -27,7 +27,7 @@ namespace FitnessPlatform.Services.Core
 
         public async Task<PaginatedUserVM>GetAllUsersAsync(int page, bool isAdmin)
         {
-            const int PageSize = 2; 
+            const int PageSize = 3; 
 
             var usersInRole = await userManager.GetUsersInRoleAsync("User");
 
