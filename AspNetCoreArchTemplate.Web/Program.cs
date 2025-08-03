@@ -50,6 +50,9 @@ namespace AspNetCoreArchTemplate.Web
                 await DataSeeder.SeedRolesAndAdminAsync(services);
                 await DataSeeder.SeedSubscriptionPlansAsync(services);
                 await DataSeeder.SeedSpecialtiesAsync(services);
+                await DataSeeder.SeedSampleUsersAsync(services);
+                await DataSeeder.SeedGymsAsync(services);
+
             }
 
             if (app.Environment.IsDevelopment())

@@ -21,6 +21,19 @@ namespace FitnessPlatform.Services.Core
 
         public async Task CreateGymAsync(CreateGymVM model)
         {
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+            if (string.IsNullOrWhiteSpace(model.Name))
+                throw new ArgumentNullException(nameof(model.Name));
+
+            if (string.IsNullOrWhiteSpace(model.Location))
+                throw new ArgumentNullException(nameof(model.Location));
+
+            if (string.IsNullOrWhiteSpace(model.MainImageUrl))
+                throw new ArgumentNullException(nameof(model.MainImageUrl));
+
             var gym = new Gym
             {
                 Name = model.Name,
@@ -159,6 +172,7 @@ namespace FitnessPlatform.Services.Core
             Gym gym = await dbContext.Gym
                 .Include(g => g.Images)
                 .FirstOrDefaultAsync(g => g.Id == id);
+            if (gym == null) throw new ArgumentException("Gym not found.");
 
             return new EditGymVM
             {
@@ -206,6 +220,8 @@ namespace FitnessPlatform.Services.Core
         {
             var plan = await dbContext.SubscriptionPlans
                 .FirstOrDefaultAsync(p => p.Id == planId);
+            if (plan == null)
+                throw new ArgumentException("Invalid subscription plan.");
             var planDuration = plan.DurationInDays;
             UserGymSubscription userGymSubscription = new UserGymSubscription
             {
@@ -221,13 +237,13 @@ namespace FitnessPlatform.Services.Core
 
         public async  Task<GymWithSubscribersVM> GetSubscribedUsersAsync(int id, string userId)
         {
-            if (id == null)
+            var gym = await dbContext.Gym.FirstOrDefaultAsync(g => g.Id == id);
+
+            if (gym == null)
             {
                 throw new ArgumentException("Invalid gym ID.");
             }
-            var gym = await dbContext.Gym.FirstOrDefaultAsync(g => g.Id == id);
 
-           
 
             var users = await dbContext.UserGymSubscription
                 .Where(s => s.GymId == id)
@@ -255,16 +271,18 @@ namespace FitnessPlatform.Services.Core
 
         public async Task<GymWithTrainersVM> GetGymTrainersAsync(int id, string userId)
         {
-            if (id == null)
-            {
-                throw new ArgumentException("Invalid gym ID.");
-            }
+            
             var gym = await dbContext.Gym
                  .Include(g => g.Trainers)
                      .ThenInclude(t => t.User)
                  .Include(g => g.Trainers)
                      .ThenInclude(t => t.Specialty)
                  .FirstOrDefaultAsync(g => g.Id == id);
+
+            if (gym == null)
+            {
+                throw new ArgumentException("Invalid gym ID.");
+            }
 
 
 

@@ -12,9 +12,9 @@
         {
 
         }
-        public DbSet<Gym> Gym { get; set; }
+        public virtual DbSet<Gym> Gym { get; set; }
 
-        public DbSet<GymImage> GymImage { get; set; }
+        public virtual DbSet<GymImage> GymImage { get; set; }
 
         public DbSet<DailyLog> DailyLog { get; set; }
 
