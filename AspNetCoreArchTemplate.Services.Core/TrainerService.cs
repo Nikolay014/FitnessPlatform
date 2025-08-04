@@ -125,12 +125,14 @@ namespace FitnessPlatform.Services.Core
                 .FirstOrDefaultAsync(tc => tc.TrainerId == trainerId && tc.ClientId == userId);
 
             if (trainerClient == null)
-                {
+            {
                 throw new ArgumentException("Subscription not found.");
             }
-             dbContext.TrainerClients.Remove(trainerClient);
-            dbContext.SaveChangesAsync();
+
+            dbContext.TrainerClients.Remove(trainerClient);
+            await dbContext.SaveChangesAsync(); 
         }
+
 
         public async Task UserSubscribeToTrainer(int trainerId, string userId)
         {
@@ -252,15 +254,15 @@ namespace FitnessPlatform.Services.Core
         {
             if (id == 0)
             {
-
-
-                var trainerid = await dbContext.Trainers
+                var trainerEntity = await dbContext.Trainers
                     .FirstOrDefaultAsync(t => t.UserId == userId);
 
+                if (trainerEntity == null)
+                {
+                    throw new ArgumentException("Trainer not found by user id.");
+                }
 
-
-
-                id = trainerid.Id;
+                id = trainerEntity.Id;
             }
 
             var trainer = await dbContext.Trainers
@@ -269,6 +271,7 @@ namespace FitnessPlatform.Services.Core
                 .Include(t => t.Events)
                     .ThenInclude(e => e.Trainer)
                         .ThenInclude(tr => tr.User)
+                .Include(t => t.User)
                 .FirstOrDefaultAsync(t => t.Id == id);
 
             if (trainer == null)
@@ -276,7 +279,7 @@ namespace FitnessPlatform.Services.Core
                 throw new ArgumentException("Invalid trainer.");
             }
 
-            var events =  trainer.Events
+            var events = trainer.Events
                 .Select(e => new TrainerEventVM
                 {
                     Id = e.Id,
@@ -288,20 +291,18 @@ namespace FitnessPlatform.Services.Core
                     GymId = e.GymId,
                     StartDate = e.StartDate.ToString("dd/MM/yyyy HH:mm"),
                     EndDate = e.EndDate.ToString("dd/MM/yyyy HH:mm"),
-
-
                 })
                 .ToList();
 
             var vm = new TrainerEventsVM
             {
-                TrainerName = trainer.User.FirstName + " " + trainer.User.LastName,
+                TrainerName = $"{trainer.User.FirstName} {trainer.User.LastName}",
                 Events = events
             };
 
             return vm;
-
         }
+
         public async Task<IEnumerable<SelectListItem>> GetAllGymsForDropdownAsync()
         {
             return await dbContext.Gym

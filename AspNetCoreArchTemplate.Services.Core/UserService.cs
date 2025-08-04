@@ -95,7 +95,10 @@ namespace FitnessPlatform.Services.Core
             {
                 var roles = await userManager.GetRolesAsync(user);
                 await userManager.RemoveFromRolesAsync(user, roles);
-                await userManager.AddToRoleAsync(user, "Trainer");
+                
+                var result = await userManager.AddToRoleAsync(user, "Trainer");
+                if (!result.Succeeded)
+                    throw new InvalidOperationException("Failed to add user to Trainer role.");
             }
             Trainer trainer = new Trainer
             {
@@ -116,8 +119,12 @@ namespace FitnessPlatform.Services.Core
                 return null; // If not admin and no userId provided, return null
             }
 
-             var user =  await userManager
-                .FindByIdAsync(userId);
+            
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return null;
+            }
             CreateTrainerUserVM createTrainerUserVM = new CreateTrainerUserVM
             {
                 UserId = userId,
@@ -128,5 +135,6 @@ namespace FitnessPlatform.Services.Core
             return createTrainerUserVM;
 
         }
+
     }
 }
