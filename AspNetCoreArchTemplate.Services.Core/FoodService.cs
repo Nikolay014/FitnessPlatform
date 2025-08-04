@@ -38,6 +38,7 @@ namespace FitnessPlatform.Services.Core
                 dbContext.DailyLog.Add(dailyLog);
                 await dbContext.SaveChangesAsync();
             }
+           
 
             foreach (var meal in model.Meals)
             {
