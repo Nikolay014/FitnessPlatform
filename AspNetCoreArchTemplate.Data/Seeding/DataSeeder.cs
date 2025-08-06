@@ -13,6 +13,12 @@ namespace FitnessPlatform.Data.Seeding
 {
     public static class DataSeeder
     {
+        //--------------------------------------------------------------
+        //The are seeded data for gyms,users and admin BUT DONT HAVE FOR THE TRAINERS AND EVENTS.It is necessary to make a trainer from users with 
+        //MAKE A TRAINER BUTTON FROM USER MANU AND AFTER THAT YOU CAN MAKE A EVENT.
+        //------------------------------------------------------------------
+
+
         public static async Task SeedRolesAndAdminAsync(IServiceProvider services)
         {
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
