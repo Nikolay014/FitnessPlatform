@@ -114,6 +114,9 @@ namespace FitnessPlatform.Services.Core
                 await userManager.RemoveFromRolesAsync(user, roles);
                 await userManager.AddToRoleAsync(user, "User");
             }
+            var trainerClients = dbContext.TrainerClients.Where(c => c.TrainerId == trainersId).ToList();
+
+            dbContext.TrainerClients.RemoveRange(trainerClients);
 
             dbContext.Trainers.Remove(trainer);
             await dbContext.SaveChangesAsync();
@@ -279,7 +282,7 @@ namespace FitnessPlatform.Services.Core
                 throw new ArgumentException("Invalid trainer.");
             }
 
-            var events = trainer.Events.Where(e => e.StartDate > DateTime.Now)
+            var events = trainer.Events
                 .Select(e => new TrainerEventVM
                 {
                     Id = e.Id,
