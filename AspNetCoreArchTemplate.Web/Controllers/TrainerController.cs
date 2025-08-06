@@ -127,7 +127,7 @@ namespace FitnessPlatform.Web.Controllers
             return View(users);
         }
 
-        [Authorize(Roles = "Admin,Trainer")]
+        
         public async Task<IActionResult> GetTrainerEvents(int id)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

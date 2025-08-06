@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <Folder Include="Configuration\" />
-    <Folder Include="Migrations\" />
     <Folder Include="Repository\" />
     <Folder Include="Seeding\Dtos\" />
     <Folder Include="Seeding\Input\" />

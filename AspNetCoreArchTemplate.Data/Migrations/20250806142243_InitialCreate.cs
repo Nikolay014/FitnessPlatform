@@ -26,38 +26,6 @@ namespace FitnessPlatform.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false, comment: "First name of the user"),
-                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false, comment: "Last name of the user"),
-                    Gender = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false, comment: "Biological sex of the user: Male, Female, Other"),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false, comment: "Phone number of the current person"),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "Date of birth"),
-                    HeightCm = table.Column<int>(type: "int", nullable: false, comment: "User's height in cm"),
-                    WeightKg = table.Column<int>(type: "int", nullable: false, comment: "User's weight in kg"),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                },
-                comment: "Extended Identity user with fitness and event tracking data");
-
-            migrationBuilder.CreateTable(
                 name: "Gym",
                 columns: table => new
                 {
@@ -72,6 +40,36 @@ namespace FitnessPlatform.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Gym", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Specialties",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false, comment: "Unique identifier for the specialty")
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, comment: "Name of the specialty"),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true, comment: "Description of the specialty")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Specialties", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubscriptionPlans",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    DurationInDays = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubscriptionPlans", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -94,6 +92,89 @@ namespace FitnessPlatform.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "GymImage",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false, comment: "Key of the Gym Image")
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GymId = table.Column<int>(type: "int", nullable: false, comment: "Gym Id that the image belongs to"),
+                    ImageUrl = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false, comment: "URL of the Gym Image"),
+                    IsPrimary = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GymImage", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GymImage_Gym_GymId",
+                        column: x => x.GymId,
+                        principalTable: "Gym",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GymWorkingHours",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GymId = table.Column<int>(type: "int", nullable: false, comment: "The ID of the gym this working hour entry belongs to."),
+                    DayOfWeek = table.Column<int>(type: "int", nullable: false, comment: "Day of the week (0 = Sunday, 6 = Saturday)"),
+                    OpenTime = table.Column<TimeSpan>(type: "time", nullable: false, comment: "Time the gym opens on the specified day"),
+                    CloseTime = table.Column<TimeSpan>(type: "time", nullable: false, comment: "Time the gym closes on the specified day")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GymWorkingHours", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GymWorkingHours_Gym_GymId",
+                        column: x => x.GymId,
+                        principalTable: "Gym",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                },
+                comment: "Represents working hours for a gym on a specific day of the week.");
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false, comment: "First name of the user"),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false, comment: "Last name of the user"),
+                    Gender = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false, comment: "Biological sex of the user: Male, Female, Other"),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false, comment: "Phone number of the current person"),
+                    ImageUrl = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true, comment: "Profile image URL of the user"),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "Date of birth"),
+                    HeightCm = table.Column<int>(type: "int", nullable: false, comment: "User's height in cm"),
+                    WeightKg = table.Column<int>(type: "int", nullable: false, comment: "User's weight in kg"),
+                    SpecialtyId = table.Column<int>(type: "int", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Specialties_SpecialtyId",
+                        column: x => x.SpecialtyId,
+                        principalTable: "Specialties",
+                        principalColumn: "Id");
+                },
+                comment: "Extended Identity user with fitness and event tracking data");
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
@@ -201,59 +282,15 @@ namespace FitnessPlatform.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GymImage",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false, comment: "Key of the Gym Image")
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    GymId = table.Column<int>(type: "int", nullable: false, comment: "Gym Id that the image belongs to"),
-                    ImageUrl = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false, comment: "URL of the Gym Image"),
-                    IsPrimary = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GymImage", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_GymImage_Gym_GymId",
-                        column: x => x.GymId,
-                        principalTable: "Gym",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "GymWorkingHours",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    GymId = table.Column<int>(type: "int", nullable: false, comment: "The ID of the gym this working hour entry belongs to."),
-                    DayOfWeek = table.Column<int>(type: "int", nullable: false, comment: "Day of the week (0 = Sunday, 6 = Saturday)"),
-                    OpenTime = table.Column<TimeSpan>(type: "time", nullable: false, comment: "Time the gym opens on the specified day"),
-                    CloseTime = table.Column<TimeSpan>(type: "time", nullable: false, comment: "Time the gym closes on the specified day")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GymWorkingHours", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_GymWorkingHours_Gym_GymId",
-                        column: x => x.GymId,
-                        principalTable: "Gym",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                },
-                comment: "Represents working hours for a gym on a specific day of the week.");
-
-            migrationBuilder.CreateTable(
                 name: "Trainers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TrainerImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TrainerImage = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     GymId = table.Column<int>(type: "int", nullable: false),
-                    Specialty = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, comment: "Specialty of the trainer (e.g. Cardio, Strength, Yoga)")
+                    SpecialtyId = table.Column<int>(type: "int", nullable: false, comment: "Specialty of the trainer (e.g. Cardio, Strength, Yoga)")
                 },
                 constraints: table =>
                 {
@@ -270,6 +307,12 @@ namespace FitnessPlatform.Data.Migrations
                         principalTable: "Gym",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Trainers_Specialties_SpecialtyId",
+                        column: x => x.SpecialtyId,
+                        principalTable: "Specialties",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -277,7 +320,10 @@ namespace FitnessPlatform.Data.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false, comment: "ID of the user who is subscribed to the gym"),
-                    GymId = table.Column<int>(type: "int", nullable: false, comment: "ID of the gym the user is subscribed to")
+                    GymId = table.Column<int>(type: "int", nullable: false, comment: "ID of the gym the user is subscribed to"),
+                    SubscriptionPlanId = table.Column<int>(type: "int", nullable: false),
+                    SubscribedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ValidUntil = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -294,6 +340,12 @@ namespace FitnessPlatform.Data.Migrations
                         principalTable: "Gym",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserGymSubscription_SubscriptionPlans_SubscriptionPlanId",
+                        column: x => x.SubscriptionPlanId,
+                        principalTable: "SubscriptionPlans",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 },
                 comment: "Defines a user's subscription to a specific gym.");
 
@@ -305,7 +357,7 @@ namespace FitnessPlatform.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DailyLogId = table.Column<int>(type: "int", nullable: false, comment: "Id of the collection food for current day"),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true, comment: "Image of the food item"),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     Calories = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -346,7 +398,7 @@ namespace FitnessPlatform.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, comment: "Title of the event"),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Image = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false, comment: "Event image"),
                     GymId = table.Column<int>(type: "int", nullable: false, comment: "ID of the gym where the event will be held"),
                     TrainerId = table.Column<int>(type: "int", nullable: false, comment: "ID of the trainer"),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "Start date and time of the event"),
@@ -479,6 +531,11 @@ namespace FitnessPlatform.Data.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_SpecialtyId",
+                table: "AspNetUsers",
+                column: "SpecialtyId");
+
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -531,6 +588,11 @@ namespace FitnessPlatform.Data.Migrations
                 column: "GymId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Trainers_SpecialtyId",
+                table: "Trainers",
+                column: "SpecialtyId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Trainers_UserId",
                 table: "Trainers",
                 column: "UserId");
@@ -539,6 +601,11 @@ namespace FitnessPlatform.Data.Migrations
                 name: "IX_UserGymSubscription_GymId",
                 table: "UserGymSubscription",
                 column: "GymId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserGymSubscription_SubscriptionPlanId",
+                table: "UserGymSubscription",
+                column: "SubscriptionPlanId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WorkoutEntries_WorkoutSessionId",
@@ -597,6 +664,9 @@ namespace FitnessPlatform.Data.Migrations
                 name: "Events");
 
             migrationBuilder.DropTable(
+                name: "SubscriptionPlans");
+
+            migrationBuilder.DropTable(
                 name: "WorkoutSession");
 
             migrationBuilder.DropTable(
@@ -610,6 +680,9 @@ namespace FitnessPlatform.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Specialties");
         }
     }
 }

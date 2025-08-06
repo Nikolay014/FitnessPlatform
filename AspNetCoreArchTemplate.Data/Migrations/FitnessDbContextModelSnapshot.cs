@@ -4,7 +4,6 @@ using AspNetCoreArchTemplate.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -12,11 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitnessPlatform.Data.Migrations
 {
     [DbContext(typeof(FitnessDbContext))]
-    [Migration("20250716141904_AddSubscriptionPlanTable")]
-    partial class AddSubscriptionPlanTable
+    partial class FitnessDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,6 +61,11 @@ namespace FitnessPlatform.Data.Migrations
                         .HasColumnType("int")
                         .HasComment("User's height in cm");
 
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)")
+                        .HasComment("Profile image URL of the user");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -99,6 +101,9 @@ namespace FitnessPlatform.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("SpecialtyId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -119,6 +124,8 @@ namespace FitnessPlatform.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("SpecialtyId");
 
                     b.ToTable("AspNetUsers", null, t =>
                         {
@@ -172,7 +179,10 @@ namespace FitnessPlatform.Data.Migrations
                         .HasComment("ID of the gym where the event will be held");
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)")
+                        .HasComment("Event image");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -238,8 +248,8 @@ namespace FitnessPlatform.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)")
@@ -305,8 +315,8 @@ namespace FitnessPlatform.Data.Migrations
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)")
                         .HasComment("URL of the Gym Image");
 
                     b.Property<bool>("IsPrimary")
@@ -353,6 +363,31 @@ namespace FitnessPlatform.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("FitnessPlatform.Data.Models.Specialty", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasComment("Unique identifier for the specialty");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasComment("Description of the specialty");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasComment("Name of the specialty");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Specialties");
+                });
+
             modelBuilder.Entity("FitnessPlatform.Data.Models.SubscriptionPlan", b =>
                 {
                     b.Property<int>("Id")
@@ -362,7 +397,8 @@ namespace FitnessPlatform.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("DurationInDays")
                         .HasColumnType("int");
@@ -391,15 +427,14 @@ namespace FitnessPlatform.Data.Migrations
                     b.Property<int>("GymId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Specialty")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                    b.Property<int>("SpecialtyId")
+                        .HasColumnType("int")
                         .HasComment("Specialty of the trainer (e.g. Cardio, Strength, Yoga)");
 
                     b.Property<string>("TrainerImage")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -408,6 +443,8 @@ namespace FitnessPlatform.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("GymId");
+
+                    b.HasIndex("SpecialtyId");
 
                     b.HasIndex("UserId");
 
@@ -670,6 +707,13 @@ namespace FitnessPlatform.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("FitnessPlatform.Data.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("FitnessPlatform.Data.Models.Specialty", null)
+                        .WithMany("Trainers")
+                        .HasForeignKey("SpecialtyId");
+                });
+
             modelBuilder.Entity("FitnessPlatform.Data.Models.DailyLog", b =>
                 {
                     b.HasOne("FitnessPlatform.Data.Models.ApplicationUser", "User")
@@ -760,6 +804,12 @@ namespace FitnessPlatform.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FitnessPlatform.Data.Models.Specialty", "Specialty")
+                        .WithMany()
+                        .HasForeignKey("SpecialtyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("FitnessPlatform.Data.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -767,6 +817,8 @@ namespace FitnessPlatform.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Gym");
+
+                    b.Navigation("Specialty");
 
                     b.Navigation("User");
                 });
@@ -924,6 +976,11 @@ namespace FitnessPlatform.Data.Migrations
                     b.Navigation("Trainers");
 
                     b.Navigation("WorkingHours");
+                });
+
+            modelBuilder.Entity("FitnessPlatform.Data.Models.Specialty", b =>
+                {
+                    b.Navigation("Trainers");
                 });
 
             modelBuilder.Entity("FitnessPlatform.Data.Models.SubscriptionPlan", b =>

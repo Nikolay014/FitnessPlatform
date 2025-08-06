@@ -59,11 +59,13 @@ namespace FitnessPlatform.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> MakeItTrainer(CreateTrainerUserVM user)
         {
+            bool isAdmin = User.IsInRole("Admin");
             if (!ModelState.IsValid)
             {
+                user = await userService.GetUserForTrainerAsync(user.UserId, isAdmin);
                 return View(user);
             }
-            bool isAdmin = User.IsInRole("Admin");
+            
             await userService.CreateTrainerAsync(user);
             return RedirectToAction("AllUsers", "User");
         }

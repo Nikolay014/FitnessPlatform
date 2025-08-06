@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static FitnessPlatform.GCommon.ValidationConstraints.WorkoutSessionConst
+using static FitnessPlatform.GCommon.ValidationConstraints.WorkoutSessionConst;
 
 namespace FitnessPlatform.Data.Models
 {

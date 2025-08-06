@@ -279,7 +279,7 @@ namespace FitnessPlatform.Services.Core
                 throw new ArgumentException("Invalid trainer.");
             }
 
-            var events = trainer.Events
+            var events = trainer.Events.Where(e => e.StartDate > DateTime.Now)
                 .Select(e => new TrainerEventVM
                 {
                     Id = e.Id,

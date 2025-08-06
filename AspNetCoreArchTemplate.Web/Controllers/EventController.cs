@@ -43,6 +43,7 @@ namespace FitnessPlatform.Web.Controllers
          {
             if (!ModelState.IsValid)
             {
+                createEventVM = await eventService.GetGymsAndTrainersAsync();
                 return View(createEventVM);
             }
 

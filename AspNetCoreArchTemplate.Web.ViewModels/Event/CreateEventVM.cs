@@ -46,6 +46,14 @@ namespace FitnessPlatform.Web.ViewModels.Event
 
             if (isStartParsed && isEndParsed)
             {
+                if (startDateTime <= DateTime.Now)
+                {
+                    yield return new ValidationResult(
+                        "Start date and time must be in the future.",
+                        new[] { nameof(StartTime) }
+                    );
+                }
+
                 if (endDateTime <= startDateTime)
                 {
                     yield return new ValidationResult(
@@ -67,5 +75,6 @@ namespace FitnessPlatform.Web.ViewModels.Event
                 }
             }
         }
+
     }
 }

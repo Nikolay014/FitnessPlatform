@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitnessPlatform.Data.Migrations
 {
     [DbContext(typeof(FitnessDbContext))]
-    [Migration("20250720055947_AddSpecialties")]
-    partial class AddSpecialties
+    [Migration("20250806142243_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,8 +65,8 @@ namespace FitnessPlatform.Data.Migrations
                         .HasComment("User's height in cm");
 
                     b.Property<string>("ImageUrl")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)")
                         .HasComment("Profile image URL of the user");
 
                     b.Property<string>("LastName")
@@ -182,7 +182,10 @@ namespace FitnessPlatform.Data.Migrations
                         .HasComment("ID of the gym where the event will be held");
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)")
+                        .HasComment("Event image");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -248,8 +251,8 @@ namespace FitnessPlatform.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)")
@@ -315,8 +318,8 @@ namespace FitnessPlatform.Data.Migrations
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)")
                         .HasComment("URL of the Gym Image");
 
                     b.Property<bool>("IsPrimary")
@@ -397,7 +400,8 @@ namespace FitnessPlatform.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("DurationInDays")
                         .HasColumnType("int");
@@ -432,7 +436,8 @@ namespace FitnessPlatform.Data.Migrations
 
                     b.Property<string>("TrainerImage")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
