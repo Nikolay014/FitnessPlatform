@@ -146,7 +146,7 @@ namespace FitnessPlatform.Data.Seeding
                 (
                     "nikolay.popov@elitegym.com",
                     "Trainer123!",
-                    "Trainer",
+                    "User",
                     new ApplicationUser
                     {
                         UserName = "nikolay.popov@elitegym.com",
@@ -164,7 +164,7 @@ namespace FitnessPlatform.Data.Seeding
                 (
                     "diana.markova@elitegym.com",
                     "Trainer123!",
-                    "Trainer",
+                    "User",
                     new ApplicationUser
                     {
                         UserName = "diana.markova@elitegym.com",
