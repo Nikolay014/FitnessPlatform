@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using static FitnessPlatform.GCommon.ValidationConstraints.EventConst;
 
 namespace FitnessPlatform.Data.Models
 {
@@ -10,10 +11,12 @@ namespace FitnessPlatform.Data.Models
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(100)]
+        [MaxLength(TitleMaxLength)]
         [Comment("Title of the event")]
         public string Title { get; set; } = null!;
-
+        [Required]
+        [MaxLength(ImageURLMaxLength)]
+        [Comment("Event image")]
         public string? Image { get; set; }
 
         [Required]
@@ -38,7 +41,7 @@ namespace FitnessPlatform.Data.Models
         [Comment("End date and time of the event")]
         public DateTime EndDate { get; set; }
 
-        [MaxLength(500)]
+        [MaxLength(DescriptionMaxLength)]
         [Comment("Description of the event")]
         public string? Description { get; set; }
 

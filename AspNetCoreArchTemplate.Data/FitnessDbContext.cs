@@ -33,9 +33,11 @@
 
         public DbSet<Specialty> Specialties { get; set; }
 
+        //No needed for the moments TODO: to make it for the future
+
         //public DbSet<TrainerSchedule> TrainerSchedules { get; set; }
 
-        public DbSet<GymWorkingHours> GymWorkingHours { get; set; }
+        //public DbSet<GymWorkingHours> GymWorkingHours { get; set; }
 
         public DbSet<EventRegistration> EventRegistrations { get; set; }
         public DbSet<TrainerClient> TrainerClients { get; set; }

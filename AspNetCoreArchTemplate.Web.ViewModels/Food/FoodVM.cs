@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static FitnessPlatform.GCommon.ValidationConstraints.FoodConst;
 
 namespace FitnessPlatform.Web.ViewModels.Food
 {
@@ -12,7 +13,7 @@ namespace FitnessPlatform.Web.ViewModels.Food
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Please enter a description of the meal.")]
-        [StringLength(200, ErrorMessage = "Description cannot exceed 200 characters.")]
+        [StringLength(DescriptionMaxLength, ErrorMessage = "Description cannot exceed 200 characters.")]
         public string Description { get; set; } = null!;
 
         [Required(ErrorMessage = "Please enter calories.")]

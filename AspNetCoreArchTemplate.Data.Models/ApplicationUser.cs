@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static FitnessPlatform.GCommon.ValidationConstraints.ApplicationUserConst;
 
 namespace FitnessPlatform.Data.Models
 {
@@ -15,27 +16,27 @@ namespace FitnessPlatform.Data.Models
     {
         [Comment("First name of the user")]
         [Required]
-        [MaxLength(50)]
+        [MaxLength(FirstNameMaxLength)]
         public string FirstName { get; set; }
 
         [Comment("Last name of the user")]
         [Required]
-        [MaxLength(50)]
+        [MaxLength(LastNameMaxLength)]
         public string LastName { get; set; }
 
         [Comment("Biological sex of the user: Male, Female, Other")]
         [Required]
-        [MaxLength(10)]
+        [MaxLength(GenderMaxLength)]
         
         public string Gender { get; set; }
 
         [Comment("Phone number of the current person")]
         [Required]
-        [MaxLength(12)]
+        [MaxLength(PhoneNumberMaxLength)]
         public string PhoneNumber { get; set; } = null!;
 
         [Comment("Profile image URL of the user")]
-        [MaxLength(200)]
+        [MaxLength(ImageURLMaxLength)]
         public string? ImageUrl { get; set; }
 
         [Comment("Date of birth")]
@@ -44,12 +45,12 @@ namespace FitnessPlatform.Data.Models
 
         [Comment("User's height in cm")]
         [Required]
-        [Range(50, 250)]
+        [Range(HaightMin, HaightMax)]
         public int HeightCm { get; set; }
 
         [Comment("User's weight in kg")]
         [Required]
-        [Range(20, 300)]
+        [Range(WeightMin, WeightMax)]
         public int WeightKg { get; set; }
 
         [NotMapped]

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using static FitnessPlatform.GCommon.ValidationConstraints.TrainerConst;
 
 namespace FitnessPlatform.Data.Models
 {
@@ -10,6 +11,7 @@ namespace FitnessPlatform.Data.Models
         public int Id { get; set; }
 
         [Required]
+        [MaxLength(ImageURLMaxLength)]
         public string TrainerImage { get; set; } = null!;
 
         [Required]

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static FitnessPlatform.GCommon.ValidationConstraints.TrainerConst;
 
 namespace FitnessPlatform.Web.ViewModels.Trainer
 {
@@ -15,7 +16,7 @@ namespace FitnessPlatform.Web.ViewModels.Trainer
         [Required]
         public int GymId { get; set; }
 
-        [Required, MaxLength(200)]
+        [Required, MaxLength(ImageURLMaxLength)]
         public string Image { get; set; }
         [Required]
         public int SpecialtyId { get; set; }

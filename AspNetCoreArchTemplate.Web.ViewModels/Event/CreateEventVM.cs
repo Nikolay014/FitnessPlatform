@@ -5,15 +5,18 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static FitnessPlatform.GCommon.ValidationConstraints.EventConst;
 
 namespace FitnessPlatform.Web.ViewModels.Event
 {
     public class CreateEventVM: IValidatableObject
     {
-        [Required, MaxLength(200)]
+        [Required]
+        [MaxLength(TitleMaxLength, ErrorMessage = "Name must be between 3 and 100 characters.")]
+        [MinLength(TitleMinLength, ErrorMessage = "Name must be between 3 and 100 characters.")]
         public string Title { get; set; }
 
-        [Required, MaxLength(300)]
+        [Required, MaxLength(ImageURLMaxLength)]
         public string Image { get; set; }
         [Required]
         public int GymId { get; set; }

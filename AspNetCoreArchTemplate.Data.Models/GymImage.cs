@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static FitnessPlatform.GCommon.ValidationConstraints.GymImageConst;
 
 namespace FitnessPlatform.Data.Models
 {
@@ -17,7 +18,7 @@ namespace FitnessPlatform.Data.Models
         public virtual Gym Gym { get; set; }
 
         [Required]
-        [MaxLength  (200)]
+        [MaxLength  (ImageURLMaxLength)]
         [Comment("URL of the Gym Image")]
         public string ImageUrl { get; set; } 
 

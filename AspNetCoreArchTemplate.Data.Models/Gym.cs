@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static FitnessPlatform.GCommon.ValidationConstraints.GymConst;
 
 namespace FitnessPlatform.Data.Models
 {
@@ -16,23 +17,23 @@ namespace FitnessPlatform.Data.Models
         public int Id { get; set; }
 
         [Required]
-        [StringLength(50)]
+        [MaxLength(NameMaxLength)]
         [Comment("Name of the Gym")]
         public string Name { get; set; } = null!;
 
         [Required]
-        [StringLength(80)]
+        [MaxLength(LocationMaxLength)]
         [Comment("Location of the Gym")]
         public string Location { get; set; } = null!;
 
         [Required]
-        [StringLength(350)]
+        [MaxLength(DescriptionMaxLength)]
         [Comment("Description of the Gym")]
         public string Description { get; set; } = null!;
 
 
 
-        [Required]    
+         
         public virtual ICollection<GymWorkingHours> WorkingHours { get; set; } = new List<GymWorkingHours>();
 
         public virtual ICollection<GymImage> Images { get; set; } = new List<GymImage>();

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static FitnessPlatform.GCommon.ValidationConstraints.WorkoutSessionConst
 
 namespace FitnessPlatform.Data.Models
 {
@@ -20,7 +21,7 @@ namespace FitnessPlatform.Data.Models
         public virtual DailyLog DailyLog { get; set; } = null!;
 
 
-        [StringLength(500)]
+        [MaxLength(NotesMaxLength)]
         public string? Notes { get; set; }  
 
         

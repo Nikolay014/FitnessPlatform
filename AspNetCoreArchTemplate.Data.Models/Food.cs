@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static FitnessPlatform.GCommon.ValidationConstraints.FoodConst;
 
 namespace FitnessPlatform.Data.Models
 {
@@ -25,7 +26,7 @@ namespace FitnessPlatform.Data.Models
         public string? Image { get; set; }
 
         [Required]
-        [MaxLength(200)]
+        [MaxLength(DescriptionMaxLength)]
         public string Description { get; set; } = null!;
 
 

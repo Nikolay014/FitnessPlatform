@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using static FitnessPlatform.GCommon.ValidationConstraints.SubscriptionPlanConst;
 
 namespace FitnessPlatform.Data.Models
 {
@@ -8,7 +9,7 @@ namespace FitnessPlatform.Data.Models
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(30)]
+        [MaxLength(NameMaxLength)]
         public string Name { get; set; } = null!;
 
         [Required]
@@ -17,6 +18,7 @@ namespace FitnessPlatform.Data.Models
         [Required]
         public decimal Price { get; set; }
 
+        [MaxLength(DescriptionMaxLength)]
         public string? Description { get; set; }
 
         public ICollection<UserGymSubscription> Subscriptions { get; set; } = new List<UserGymSubscription>();
