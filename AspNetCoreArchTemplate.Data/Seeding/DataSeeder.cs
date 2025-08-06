@@ -145,7 +145,7 @@ namespace FitnessPlatform.Data.Seeding
                 ),
                 (
                     "nikolay.popov@elitegym.com",
-                    "Trainer123!",
+                    "User123!",
                     "User",
                     new ApplicationUser
                     {
@@ -163,7 +163,7 @@ namespace FitnessPlatform.Data.Seeding
                 ),
                 (
                     "diana.markova@elitegym.com",
-                    "Trainer123!",
+                    "User123!",
                     "User",
                     new ApplicationUser
                     {
@@ -253,8 +253,8 @@ namespace FitnessPlatform.Data.Seeding
             ),
             (
                 "kiril.stanchev@elitegym.com",
-                "Trainer123!",
-                "Trainer",
+                "User123!",
+                "User",
                 new ApplicationUser
                 {
                     UserName = "kiril.stanchev@elitegym.com",
@@ -325,8 +325,8 @@ namespace FitnessPlatform.Data.Seeding
             ),
             (
                 "martin.petkov@elitegym.com",
-                "Trainer123!",
-                "Trainer",
+                "User123!",
+                "User",
                 new ApplicationUser
                 {
                     UserName = "martin.petkov@elitegym.com",
